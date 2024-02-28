@@ -16,3 +16,6 @@ I like Safari's reading list a lot, but sync just doesn't work between my ipad, 
 * Thymeleaf
 * H2
 * A tiny VM somewhere out there
+
+# UI sketch
+![A home page for my webapp including a textfield to save links, a list of links I have saved, and a way to filter links by those I have read and not read](docs/bookmarks.jpeg)
