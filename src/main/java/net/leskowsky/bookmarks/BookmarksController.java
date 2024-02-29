@@ -12,20 +12,20 @@ public class BookmarksController {
 
     private final Logger logger = LoggerFactory.getLogger(BookmarksController.class);
 
-    private BookmarkRepository bookmarkRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     public BookmarksController(BookmarkRepository bookmarkRepository) {
         this.bookmarkRepository = bookmarkRepository;
     }
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String getBookmarks(Model model) {
         model.addAttribute("urls", bookmarkRepository.findAll());
         return "index";
     }
 
     @PostMapping("/new")
-    public String add(String url) {
+    public String addBookmark(String url) {
         logger.info("url_to_add=" + url);
         bookmarkRepository.save(new Bookmark(url));
         // Redirect client to bookmarks index page
