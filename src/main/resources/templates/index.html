@@ -18,6 +18,10 @@
         <button type="submit">Add</button>
     </form>
 
+    <p class="error"
+       th:text="${errorMessage}"
+       th:if="${errorMessage}">error</p>
+
     <ul>
         <li th:each="url : ${urls}">
             <a th:href="${url.getUrl()}" th:text="${url.getUrl()}">url</a>

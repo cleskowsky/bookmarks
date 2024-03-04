@@ -6,6 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
+
+import java.net.URI;
 
 @Controller
 public class BookmarksController {
@@ -25,10 +29,30 @@ public class BookmarksController {
     }
 
     @PostMapping("/new")
-    public String addBookmark(String url) {
-        logger.info("url_to_add=" + url);
-        bookmarkRepository.save(new Bookmark(url));
+    public RedirectView addBookmark(String url, RedirectAttributes redirectAttributes) {
+        logger.info("url=" + url);
+
+        if (URLValidator.validate(url)) {
+            bookmarkRepository.save(new Bookmark(url));
+        } else {
+            // todo: Put in message bundle
+            redirectAttributes.addFlashAttribute("errorMessage", "Sorry but that doesn't look like a valid url.");
+        }
+
         // Redirect client to bookmarks index page
-        return "redirect:";
+         return new RedirectView("/");
+    }
+
+    static class URLValidator {
+
+        public static boolean validate(String s) {
+            try {
+                new URI(s).toURL();
+                return true;
+            } catch (Exception e) {
+                // todo: Send to err reporter
+                return false;
+            }
+        }
     }
 }
