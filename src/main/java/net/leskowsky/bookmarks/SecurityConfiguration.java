@@ -20,11 +20,11 @@ public class SecurityConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
-    @Value("${SecurityConfiguration.defaultUsername:user}")
-    private String defaultUsername;
+    @Value("${SecurityConfiguration.userName:user}")
+    private String userName;
 
-    @Value("${SecurityConfiguration.defaultPassword:password}")
-    private String defaultPassword;
+    @Value("${SecurityConfiguration.password:password}")
+    private String password;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -41,11 +41,11 @@ public class SecurityConfiguration {
     @Bean
     public UserDetailsService userDetailsService() {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        var passwd = encoder.encode(defaultPassword);
+        var passwd = encoder.encode(password);
 
-        logger.info(String.format("default_user=%s default_password=%s", defaultUsername, defaultPassword));
+        logger.info(String.format("default_user=%s default_password=%s", userName, password));
 
-        UserDetails userDetails = User.withUsername(defaultUsername)
+        UserDetails userDetails = User.withUsername(userName)
                 .password(passwd)
                 .roles("USER")
                 .build();
