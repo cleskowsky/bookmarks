@@ -1,5 +1,7 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -12,7 +14,14 @@
 <main>
     <h1>Bookmarks</h1>
 
-    <form th:action="@{/new}" method="post">
+    <ul>
+        <li sec:authorize="!isAuthenticated()"><a href="/login">Login</a></li>
+        <li>Logged in user: <span sec:authentication="name">userName</span></li>
+    </ul>
+
+    <form method="post"
+          th:action="@{/new}"
+          sec:authorize="isAuthenticated()">
         <label for="url">Add a bookmark to my reading list</label>
         <input type="text" name="url" id="url">
         <button type="submit">Add</button>

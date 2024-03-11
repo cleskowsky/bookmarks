@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
@@ -28,6 +30,8 @@ public class BookmarksControllerTests {
     public void setup() {
         client = MockMvcWebTestClient.bindToApplicationContext(wac)
                 .apply(springSecurity())
+                .defaultRequest(MockMvcRequestBuilders.get("/").with(SecurityMockMvcRequestPostProcessors.csrf()))
+                .configureClient()
                 .build();
     }
 
@@ -38,12 +42,13 @@ public class BookmarksControllerTests {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class).value(v -> {
-                    assertTrue(v.contains("<button type=\"submit\">Add</button>"));
+                    assertTrue(v.contains("Login"));
                 });
     }
 
     // add a bookmark
     @Test
+    @WithMockUser
     public void addBookmark(@Autowired BookmarkRepository repository) {
         client.post().uri("/new")
                 .body(fromFormData("url", "https://www.google.ca"))
@@ -55,6 +60,7 @@ public class BookmarksControllerTests {
 
     // bookmark is invalid
     @Test
+    @WithMockUser
     public void addInvalidBookmarkFails(@Autowired BookmarkRepository repository) {
         client.post().uri("/new")
                 .body(fromFormData("url", "a"))
@@ -78,8 +84,12 @@ public class BookmarksControllerTests {
         });
     }
 
-    // todo: Can see getBookmarks when not logged in
-    // todo: Can't see add bookmark form when not logged in
     // todo: Can't add a bookmark when not logged in
-    // todo: Can add a bookmark when logged in
+    @Test
+    public void anonymousUserCantAddBookmarks() {
+        client.post().uri("/new")
+                .body(fromFormData("url", "http://www.google.ca"))
+                .exchange()
+                .expectStatus().is4xxClientError();
+    }
 }
