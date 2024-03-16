@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>net.leskowsky</groupId>
 	<artifactId>bookmarks</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>latest</version>
 	<name>bookmarks</name>
 	<description>Read later app because bookmark syncing only seems to work in chrome and I don&apos;t want to use that</description>
 	<properties>

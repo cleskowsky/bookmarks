@@ -20,10 +20,10 @@ public class SecurityConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
-    @Value("${SecurityConfiguration.userName:user}")
+    @Value("${SecurityConfiguration.userName}")
     private String userName;
 
-    @Value("${SecurityConfiguration.password:password}")
+    @Value("${SecurityConfiguration.password}")
     private String password;
 
     @Bean
