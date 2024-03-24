@@ -21,7 +21,7 @@
     - name: Build container image
       docker_image:
         name: bookmarks
-        tag: latest
+        tag: "{{ git_version }}"
         source: build
         build:
           path: /opt/bookmarks
