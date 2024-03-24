@@ -10,6 +10,7 @@ public class BookmarksApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookmarksApplication.class, args);
+		System.out.println(2);
 	}
 
 }
