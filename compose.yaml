@@ -1,6 +1,6 @@
 services:
   bookmarks:
-    build: .
+    image: bookmarks:latest
     ports:
       - "8080:8080"
     volumes:
@@ -8,6 +8,7 @@ services:
     env_file:
       - path: .env
         required: false
+    restart: always
 
 volumes:
   data:

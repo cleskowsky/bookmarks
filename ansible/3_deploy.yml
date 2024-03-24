@@ -1,27 +1,7 @@
 ---
 
 - hosts: all
-  vars:
-    docker_users:
-      - ubuntu
-  roles:
-    - geerlingguy.docker
   tasks:
-    - name: Apt install packages
-      apt:
-        pkg:
-          - python3-pip
-          - fail2ban
-
-    - name: Start fail2ban
-      systemd_service:
-        state: started
-        enabled: yes
-        name: fail2ban
-
-    - name: Install python docker mod
-      pip: name=docker
-
     - name: Checkout bookmarks
       git:
         repo: https://github.com/cleskowsky/bookmarks.git
@@ -32,11 +12,16 @@
       copy:
         content: |
           spring.datasource.url=jdbc:h2:file:/var/lib/bookmarks.db
+          spring.datasource.password=
           SecurityConfiguration.userName={{ user }}
           SecurityConfiguration.password={{ password }}
         dest: /opt/bookmarks/.env
         mode: 0600
 
-    - name: Build, run bookmarks
-      docker_compose_v2:
-        project_src: /opt/bookmarks
+    - name: Build container image
+      docker_image:
+        name: bookmarks
+        tag: latest
+        source: build
+        build:
+          path: /opt/bookmarks

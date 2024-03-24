@@ -1,0 +1,24 @@
+---
+
+- hosts: all
+  vars:
+    docker_users:
+      - ubuntu
+      - bookmarks
+  roles:
+    - geerlingguy.docker
+  tasks:
+    - name: Apt install packages
+      apt:
+        pkg:
+          - python3-pip
+          - fail2ban
+
+    - name: Start fail2ban
+      service:
+        state: started
+        enabled: yes
+        name: fail2ban
+
+    - name: Install python docker mod
+      pip: name=docker
