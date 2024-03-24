@@ -24,6 +24,9 @@ public class BookmarksControllerTests {
     @Autowired
     WebApplicationContext wac;
 
+    @Autowired
+    BookmarkRepository bookmarkRepository;
+
     private WebTestClient client;
 
     @BeforeEach
@@ -49,25 +52,25 @@ public class BookmarksControllerTests {
     // add a bookmark
     @Test
     @WithMockUser
-    public void addBookmark(@Autowired BookmarkRepository repository) {
+    public void addBookmark() {
         client.post().uri("/new")
                 .body(fromFormData("url", "https://www.google.ca"))
                 .exchange()
                 .expectStatus().is3xxRedirection();
 
-        assertEquals(1, repository.count());
+        assertEquals(1, bookmarkRepository.count());
     }
 
     // bookmark is invalid
     @Test
     @WithMockUser
-    public void addInvalidBookmarkFails(@Autowired BookmarkRepository repository) {
+    public void addInvalidBookmarkFails() {
         client.post().uri("/new")
                 .body(fromFormData("url", "a"))
                 .exchange()
                 .expectStatus().is3xxRedirection();
 
-        assertEquals(0, repository.count());
+        assertEquals(0, bookmarkRepository.count());
 
         // todo: Couldn't figure out how to test a flash message is added to my session
         //       for the failure. Probably my understanding of mockmvc or how webtestclient

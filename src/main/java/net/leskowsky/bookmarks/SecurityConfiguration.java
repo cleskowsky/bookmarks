@@ -15,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
-
 @Configuration
 public class SecurityConfiguration {
 
@@ -32,13 +30,13 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         var httpSecurity = http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
-                        .requestMatchers(toH2Console()).permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults());
 
-        httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console()));
+        httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
         httpSecurity.headers(h -> h.frameOptions(fo -> fo.sameOrigin()));
 
         return httpSecurity.build();
