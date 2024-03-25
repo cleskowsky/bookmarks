@@ -2,16 +2,15 @@
 
 - hosts: all
   tasks:
-    - name: Checkout bookmarks
+    - name: Checkout code
       git:
         repo: https://github.com/cleskowsky/bookmarks.git
         dest: "/opt/bookmarks@{{ git_version }}"
 
-    - name: Write app env
+    - name: Write env file
       copy:
         content: |
           spring.datasource.url=jdbc:h2:file:/var/lib/bookmarks.db
-          spring.datasource.password=
           SecurityConfiguration.userName={{ user }}
           SecurityConfiguration.password={{ password }}
           version={{ git_version }}
@@ -20,15 +19,7 @@
         group: ubuntu
         mode: 0600
 
-    - name: Build container image
-      docker_image:
-        name: bookmarks
-        tag: "{{ git_version }}"
-        source: build
-        build:
-          path: /opt/bookmarks
-
-    - name: Replace app container
+    - name: Update app
       shell: |
         cd /opt/bookmarks
         docker compose stop
