@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.3</version>
+		<version>3.2.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>net.leskowsky</groupId>
 	<artifactId>bookmarks</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>latest</version>
 	<name>bookmarks</name>
 	<description>Read later app because bookmark syncing only seems to work in chrome and I don&apos;t want to use that</description>
 	<properties>
@@ -69,6 +69,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>

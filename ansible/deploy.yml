@@ -1,0 +1,27 @@
+---
+
+- hosts: all
+  tasks:
+    - name: Checkout code
+      git:
+        repo: https://github.com/cleskowsky/bookmarks.git
+        dest: "/opt/bookmarks@{{ git_version }}"
+
+    - name: Write env file
+      copy:
+        content: |
+          spring.datasource.url=jdbc:h2:file:/var/lib/bookmarks.db
+          SecurityConfiguration.userName={{ user }}
+          SecurityConfiguration.password={{ password }}
+          version={{ git_version }}
+        dest: /opt/bookmarks/.env
+        owner: ubuntu
+        group: ubuntu
+        mode: 0600
+
+    - name: Update app
+      shell: |
+        cd /opt/bookmarks
+        docker compose stop
+        docker compose rm
+        docker compose up -d --build

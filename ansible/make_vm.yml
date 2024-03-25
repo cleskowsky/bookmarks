@@ -1,0 +1,52 @@
+---
+
+- hosts: 127.0.0.1
+  connection: local
+  tasks:
+    - name: Create allow https security group
+      amazon.aws.ec2_security_group:
+        name: allow_web
+        description: Allow web
+        vpc_id: "{{ vpc_id }}"
+        rules:
+          - proto: tcp
+            ports:
+              - 443
+            cidr_ip: 0.0.0.0/0
+        tags:
+          App: bookmarks
+          Env: prod
+          Ansible: 1
+
+    - name: Create allow web security group
+      amazon.aws.ec2_security_group:
+        name: allow_ssh
+        description: Allow ssh
+        vpc_id: "{{ vpc_id }}"
+        rules:
+          - proto: tcp
+            ports:
+              - 22
+            cidr_ip: 0.0.0.0/0
+        tags:
+          App: bookmarks
+          Env: prod
+          Ansible: 1
+
+    - name: Create bookmarks ec2 instance
+      amazon.aws.ec2_instance:
+        name: bookmarks
+        key_name: "{{ key_name }}"
+        vpc_subnet_id: "{{ subnet_id }}"
+        instance_type: t4g.small
+        security_groups:
+          - default
+          - allow_web
+          - allow_ssh
+        network:
+          assign_public_ip: yes
+        image_id: "{{ ami_id }}"
+        tags:
+          App: bookmarks
+          Env: prod
+          Ansible: 1

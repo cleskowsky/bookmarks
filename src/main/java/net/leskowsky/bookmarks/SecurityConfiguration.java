@@ -20,22 +20,26 @@ public class SecurityConfiguration {
 
     private final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
 
-    @Value("${SecurityConfiguration.userName:user}")
+    @Value("${SecurityConfiguration.userName}")
     private String userName;
 
-    @Value("${SecurityConfiguration.password:password}")
+    @Value("${SecurityConfiguration.password}")
     private String password;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
+        var httpSecurity = http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults());
 
-        return http.build();
+        httpSecurity.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+        httpSecurity.headers(h -> h.frameOptions(fo -> fo.sameOrigin()));
+
+        return httpSecurity.build();
     }
 
     @Bean
