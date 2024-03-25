@@ -5,17 +5,19 @@
     - name: Checkout bookmarks
       git:
         repo: https://github.com/cleskowsky/bookmarks.git
-        version: 12-deploy-bookmarks
-        dest: /opt/bookmarks
+        dest: "/opt/bookmarks@{{ git_version }}"
 
-    - name: Write bookmarks config
+    - name: Write app env
       copy:
         content: |
           spring.datasource.url=jdbc:h2:file:/var/lib/bookmarks.db
           spring.datasource.password=
           SecurityConfiguration.userName={{ user }}
           SecurityConfiguration.password={{ password }}
+          version={{ git_version }}
         dest: /opt/bookmarks/.env
+        owner: ubuntu
+        group: ubuntu
         mode: 0600
 
     - name: Build container image
@@ -25,3 +27,10 @@
         source: build
         build:
           path: /opt/bookmarks
+
+    - name: Replace app container
+      shell: |
+        cd /opt/bookmarks
+        docker compose stop
+        docker compose rm
+        docker compose up -d --build

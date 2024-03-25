@@ -1,4 +1,9 @@
 ---
 
-user: "{{ vault_user}}"
+user: "{{ vault_user }}"
 password: "{{ vault_password }}"
+
+vpc_id: "{{ vault_vpc_id }}"
+subnet_id: "{{ vault_subnet_id }}"
+ami_id: "{{ vault_ami_id }}"
+key_name: "{{ vault_key_name }}"

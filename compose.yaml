@@ -1,6 +1,8 @@
 services:
   bookmarks:
-    image: bookmarks:latest
+    build:
+      tags:
+        - "bookmarks:${version}"
     ports:
       - "8080:8080"
     volumes:

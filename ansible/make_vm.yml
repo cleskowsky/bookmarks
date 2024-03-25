@@ -7,11 +7,10 @@
       amazon.aws.ec2_security_group:
         name: allow_web
         description: Allow web
-        vpc_id: vpc-d145b9b8
+        vpc_id: "{{ vpc_id }}"
         rules:
           - proto: tcp
             ports:
-              - 80
               - 443
             cidr_ip: 0.0.0.0/0
         tags:
@@ -23,7 +22,7 @@
       amazon.aws.ec2_security_group:
         name: allow_ssh
         description: Allow ssh
-        vpc_id: vpc-d145b9b8
+        vpc_id: "{{ vpc_id }}"
         rules:
           - proto: tcp
             ports:
@@ -37,8 +36,8 @@
     - name: Create bookmarks ec2 instance
       amazon.aws.ec2_instance:
         name: bookmarks
-        key_name: christian2024
-        vpc_subnet_id: subnet-528a703b
+        key_name: "{{ key_name }}"
+        vpc_subnet_id: "{{ subnet_id }}"
         instance_type: t4g.small
         security_groups:
           - default
@@ -46,7 +45,7 @@
           - allow_ssh
         network:
           assign_public_ip: yes
-        image_id: ami-09fe03fb20714c841
+        image_id: "{{ ami_id }}"
         tags:
           App: bookmarks
           Env: prod
