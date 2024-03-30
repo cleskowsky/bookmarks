@@ -1,17 +1,20 @@
+cf_email = $(shell grep api_email ~/.cf_token | cut -d '=' -f 2)
+cf_token = $(shell grep api_token ~/.cf_token | cut -d '=' -f 2)
+
 ssh:
 	ssh ubuntu@$(shell aws ec2 describe-instances --filters "Name=tag:App,Values=bookmarks" | jq '.Reservations[].Instances[0].PublicIpAddress' -r)
 
 infra:
-	cd ansible && time ansible-playbook make_vm.yml --connection=local
+	cd ansible && time ansible-playbook 1_infra.yml -e 'cf_email=$(cf_email) cf_token=$(cf_token)'
 
-config-os:
-	cd ansible && time ansible-playbook -i inventories/aws_ec2.yml --vault-password-file ~/.bookmarks_vault_password config_os.yml -u ubuntu -b
+linux:
+	cd ansible && time ansible-playbook -i inventories/aws_ec2.yml 2_linux.yml -u ubuntu -b
 
 deploy:
-	cd ansible && time ansible-playbook -i inventories/aws_ec2.yml --vault-password-file ~/.bookmarks_vault_password deploy.yml -u ubuntu -b -e "git_version=$(shell git rev-parse --short HEAD)"
+	cd ansible && time ansible-playbook -i inventories/aws_ec2.yml 3_deploy.yml -u ubuntu -b -e "git_version=$(shell git rev-parse --short HEAD)"
 
 edit-vault:
-	ansible-vault edit --vault-password-file ~/.bookmarks_vault_password ./ansible/inventories/group_vars/all/vault
+	cd ansible && ansible-vault edit group_vars/all/vault
 
 setup:
 	brew install ansible awscli jq

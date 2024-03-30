@@ -50,3 +50,13 @@
           App: bookmarks
           Env: prod
           Ansible: 1
+      register: vm
+
+    - name: Create cloudflare dns record
+      community.general.cloudflare_dns:
+        zone: leskowsky.net
+        record: bm
+        type: A
+        value: "{{ vm.instances[0].public_ip_address }}"
+        account_email: "{{ cf_email }}"
+        account_api_key: "{{ cf_token }}"
