@@ -20,7 +20,7 @@
           SecurityConfiguration.userName={{ user }}
           SecurityConfiguration.password={{ password }}
           version={{ git_version }}
-          TRAEFIK_CERTIFICATESRESOLVERS_BOOKMARKS_ACME_EMAIL={{ letsencrypt_acme_email }}
+          TRAEFIK_CERTIFICATESRESOLVERS_BOOKMARKS_ACME_EMAIL={{ vault_letsencrypt_acme_email }}
         dest: /opt/bookmarks/.env
         owner: ubuntu
         group: ubuntu
