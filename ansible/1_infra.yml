@@ -11,6 +11,9 @@
         rules:
           - proto: tcp
             ports:
+              # Port 80 is needed by letsencrypt domain ownership check
+              # eg Fetching http://bm.leskowsky.net/.well-known/acme-challenge/...
+              - 80
               - 443
             cidr_ip: 0.0.0.0/0
         tags:

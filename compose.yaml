@@ -2,7 +2,7 @@ services:
   app:
     build:
       tags:
-        - "bookmarks:${git_version}"
+        - "bookmarks:${version}"
     ports:
       - "8080"
     volumes:
