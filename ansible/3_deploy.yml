@@ -7,6 +7,12 @@
         repo: https://github.com/cleskowsky/bookmarks.git
         dest: "/opt/bookmarks@{{ git_version }}"
 
+    - name: Update symlink
+      file:
+        src: "/opt/bookmarks@{{ git_version }}"
+        dest: /opt/bookmarks
+        state: link
+
     - name: Write env file
       copy:
         content: |
@@ -14,6 +20,7 @@
           SecurityConfiguration.userName={{ user }}
           SecurityConfiguration.password={{ password }}
           version={{ git_version }}
+          TRAEFIK_CERTIFICATESRESOLVERS_BOOKMARKS_ACME_EMAIL={{ vault_letsencrypt_acme_email }}
         dest: /opt/bookmarks/.env
         owner: ubuntu
         group: ubuntu
@@ -23,5 +30,4 @@
       shell: |
         cd /opt/bookmarks
         docker compose stop
-        docker compose rm
         docker compose up -d --build
