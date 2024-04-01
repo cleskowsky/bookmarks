@@ -24,7 +24,7 @@ public class BookmarksController {
 
     @GetMapping("/")
     public String getBookmarks(Model model) {
-        model.addAttribute("urls", bookmarkRepository.findAll());
+        model.addAttribute("urls", bookmarkRepository.findByOrderByIdDesc());
         return "index";
     }
 
@@ -40,7 +40,7 @@ public class BookmarksController {
         }
 
         // Redirect client to bookmarks index page
-         return new RedirectView("/");
+        return new RedirectView("/");
     }
 
     static class URLValidator {
