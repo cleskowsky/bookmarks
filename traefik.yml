@@ -25,5 +25,3 @@ entryPoints:
 
   websecure:
     address: ":443"
-    forwardedHeaders:
-      insecure: true
