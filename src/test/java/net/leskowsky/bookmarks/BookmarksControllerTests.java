@@ -83,7 +83,7 @@ public class BookmarksControllerTests {
                 "https://cleskowsky.github.io", true,
                 "a", false
         ).forEach((key, val) -> {
-            assertTrue(BookmarksController.URLValidator.validate(key) == val);
+            assertTrue(UrlValidator.validate(key) == val);
         });
     }
 

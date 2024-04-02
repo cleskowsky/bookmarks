@@ -32,7 +32,7 @@ public class BookmarksController {
     public RedirectView addBookmark(String url, RedirectAttributes redirectAttributes) {
         logger.info("url=" + url);
 
-        if (URLValidator.validate(url)) {
+        if (UrlValidator.validate(url)) {
             bookmarkRepository.save(new Bookmark(url));
         } else {
             // todo: Put in message bundle
@@ -41,18 +41,5 @@ public class BookmarksController {
 
         // Redirect client to bookmarks index page
         return new RedirectView("/");
-    }
-
-    static class URLValidator {
-
-        public static boolean validate(String s) {
-            try {
-                new URI(s).toURL();
-                return true;
-            } catch (Exception e) {
-                // todo: Send to err reporter
-                return false;
-            }
-        }
     }
 }
