@@ -5,11 +5,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.net.URI;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class BookmarksController {
@@ -23,16 +26,21 @@ public class BookmarksController {
     }
 
     @GetMapping("/")
-    public String getBookmarks(Model model) {
-        model.addAttribute("urls", bookmarkRepository.findByOrderByIdDesc());
-        return "index";
+    public ModelAndView getBookmarks() {
+        logger.info("controller=bookmarks action=get");
+
+        return new ModelAndView("index",
+                Map.of("bookmarks", bookmarkRepository.findByStatusOrderByIdDesc(Bookmark.BookmarkStatus.Unread)));
     }
 
     @PostMapping("/new")
     public RedirectView addBookmark(String url, RedirectAttributes redirectAttributes) {
-        logger.info("url=" + url);
+        logger.info("controller=bookmarks action=new url=" + url);
 
-        if (UrlValidator.validate(url)) {
+        boolean isValid = UrlValidator.validate(url);
+        logger.info("is_valid=" + isValid);
+
+        if (isValid) {
             bookmarkRepository.save(new Bookmark(url));
         } else {
             // todo: Put in message bundle
@@ -40,6 +48,20 @@ public class BookmarksController {
         }
 
         // Redirect client to bookmarks index page
+        return new RedirectView("/");
+    }
+
+    @PostMapping("/{id}/delete")
+    public RedirectView deleteBookmark(@PathVariable Integer id) {
+        logger.info("controller=bookmarks action=delete id=" + id);
+
+        Optional<Bookmark> result = bookmarkRepository.findById(id);
+        if (result.isPresent()) {
+            var bookmark = result.get();
+            bookmark.setStatus(Bookmark.BookmarkStatus.Deleted);
+            bookmarkRepository.save(bookmark);
+        }
+
         return new RedirectView("/");
     }
 }

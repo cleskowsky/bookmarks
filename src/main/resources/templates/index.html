@@ -30,9 +30,18 @@
        th:text="${errorMessage}"
        th:if="${errorMessage}">error</p>
 
-    <ul>
-        <li th:each="url : ${urls}">
-            <a th:href="${url.getUrl()}" th:text="${url.getUrl()}">url</a>
+    <ul class="bookmarks">
+        <li class="card" th:each="bookmark : ${bookmarks}">
+            <a th:href="${bookmark.getUrl()}" th:text="${bookmark.getUrl()}">url</a>
+
+            <ul class="actions"
+                sec:authorize="isAuthenticated()">
+                <li>
+                    <form th:action="@{/{id}/delete(id=${bookmark.getId()})}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </li>
+            </ul>
         </li>
     </ul>
 </main>
