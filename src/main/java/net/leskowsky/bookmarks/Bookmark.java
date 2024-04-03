@@ -3,6 +3,8 @@ package net.leskowsky.bookmarks;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 public class Bookmark {
@@ -20,6 +22,8 @@ public class Bookmark {
 
     @Enumerated(EnumType.STRING)
     private BookmarkStatus status = BookmarkStatus.Unread;
+
+    private LocalDateTime createdAt = LocalDateTime.now().plusDays(10);
 
     public Bookmark() {
     }
