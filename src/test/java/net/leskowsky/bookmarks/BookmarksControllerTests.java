@@ -13,8 +13,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.web.reactive.function.BodyInserters.fromFormData;
 
@@ -53,24 +52,29 @@ public class BookmarksControllerTests {
     @Test
     @WithMockUser
     public void addBookmark() {
+        var url = "https://addBookmarkTest.leskowsky.net";
         client.post().uri("/new")
-                .body(fromFormData("url", "https://www.google.ca"))
+                .body(fromFormData("url", url))
                 .exchange()
                 .expectStatus().is3xxRedirection();
 
-        assertEquals(1, bookmarkRepository.count());
+        var result = bookmarkRepository.findByUrl(url);
+        assertTrue(result.isPresent());
+        assertEquals(url, result.get().getUrl());
+        assertEquals(Bookmark.BookmarkStatus.Unread, result.get().getStatus());
     }
 
     // bookmark is invalid
     @Test
     @WithMockUser
     public void addInvalidBookmarkFails() {
+        var url = "a";
         client.post().uri("/new")
-                .body(fromFormData("url", "a"))
+                .body(fromFormData("url", url))
                 .exchange()
                 .expectStatus().is3xxRedirection();
 
-        assertEquals(0, bookmarkRepository.count());
+        assertFalse(bookmarkRepository.findByUrl(url).isPresent());
 
         // todo: Couldn't figure out how to test a flash message is added to my session
         //       for the failure. Probably my understanding of mockmvc or how webtestclient
@@ -83,7 +87,7 @@ public class BookmarksControllerTests {
                 "https://cleskowsky.github.io", true,
                 "a", false
         ).forEach((key, val) -> {
-            assertTrue(UrlValidator.validate(key) == val);
+            assertEquals(val, UrlValidator.validate(key));
         });
     }
 
@@ -94,5 +98,24 @@ public class BookmarksControllerTests {
                 .body(fromFormData("url", "http://www.google.ca"))
                 .exchange()
                 .expectStatus().is4xxClientError();
+    }
+
+    // delete a bookmark
+    @Test
+    @WithMockUser
+    public void deleteBookmark() {
+        // given a bookmark
+        var url = "https://deleteBookmarkTest.leskowsky.net";
+        var bookmark = bookmarkRepository.save(new Bookmark(url));
+
+        // when i delete it
+        client.post().uri(String.format("/%d/delete", bookmark.getId()))
+                .exchange()
+                .expectStatus().is3xxRedirection();
+
+        // then it's status is deleted
+        var result = bookmarkRepository.findByUrl(url);
+        assertTrue(result.isPresent());
+        assertEquals(Bookmark.BookmarkStatus.Deleted, result.get().getStatus());
     }
 }

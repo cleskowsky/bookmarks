@@ -1,9 +1,6 @@
 package net.leskowsky.bookmarks;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -15,6 +12,14 @@ public class Bookmark {
     private int id;
 
     private String url;
+
+    enum BookmarkStatus {
+        Unread,
+        Deleted
+    }
+
+    @Enumerated(EnumType.STRING)
+    private BookmarkStatus status = BookmarkStatus.Unread;
 
     public Bookmark() {
     }
