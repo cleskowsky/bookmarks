@@ -21,3 +21,7 @@
 
     - name: Install python docker mod
       pip: name=docker
+
+    - name: Set timezone to America/Toronto
+      community.general.timezone:
+        name: America/Toronto

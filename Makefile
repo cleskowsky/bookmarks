@@ -15,8 +15,6 @@ setup:
 
 infra:
 	cd ansible && time ansible-playbook 1_infra.yml -e 'cf_email=$(cf_email) cf_token=$(cf_token)'
-
-linux:
 	cd ansible && time ansible-playbook -i inventories/aws_ec2.yml 2_linux.yml -u ubuntu -b
 
 deploy:

@@ -10,7 +10,7 @@ services:
     env_file:
       - path: .env
         required: false
-    restart: always
+    restart: unless-stopped
     labels:
       - traefik.http.routers.app.rule=Host(`bm.leskowsky.net`)
       - traefik.http.routers.app.tls=true
@@ -26,6 +26,7 @@ services:
       - ./traefik.yml:/etc/traefik/traefik.yml
       - /var/run/docker.sock:/var/run/docker.sock
       - letsencrypt:/letsencrypt
+    restart: unless-stopped
 
 volumes:
   data:
