@@ -8,6 +8,26 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bookmarks</title>
+
+    <style>
+        .card {
+            margin: 15px auto;
+        }
+
+        .actions {
+            padding: 0;
+        }
+
+        .actions li {
+            display: inline-block;
+            list-style: none;
+            margin: 5px 3px 0 0;
+        }
+
+        form {
+            display: inline;
+        }
+    </style>
 </head>
 <body>
 
@@ -26,6 +46,10 @@
         <button type="submit">Add</button>
     </form>
 
+    <ul>
+        <li><a href="/?showOnly=Read">Show read</a></li>
+    </ul>
+
     <p class="flashMessage error"
        th:text="${errorMessage}"
        th:if="${errorMessage}">error</p>
@@ -36,6 +60,12 @@
 
             <ul class="actions"
                 sec:authorize="isAuthenticated()">
+                <li>
+                    <form th:action="@{/{id}/markRead(id=${bookmark.getId()})}" method="post">
+                        <button type="submit">Mark read</button>
+                    </form>
+                </li>
+
                 <li>
                     <form th:action="@{/{id}/delete(id=${bookmark.getId()})}" method="post">
                         <button type="submit">Delete</button>

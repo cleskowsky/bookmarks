@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -25,11 +26,16 @@ public class BookmarksController {
     }
 
     @GetMapping("/")
-    public ModelAndView getBookmarks() {
+    public ModelAndView getBookmarks(@RequestParam(name = "showOnly", required = false) Bookmark.BookmarkStatus showOnly) {
         logger.info("controller=bookmarks action=get");
 
+        if (showOnly == null) {
+            showOnly = Bookmark.BookmarkStatus.Unread;
+        }
+        logger.info("showOnly=" + showOnly);
+
         return new ModelAndView("index",
-                Map.of("bookmarks", bookmarkRepository.findByStatusOrderByIdDesc(Bookmark.BookmarkStatus.Unread)));
+                Map.of("bookmarks", bookmarkRepository.findByStatusOrderByIdDesc(showOnly)));
     }
 
     @PostMapping("/new")
@@ -58,6 +64,20 @@ public class BookmarksController {
         if (result.isPresent()) {
             var bookmark = result.get();
             bookmark.setStatus(Bookmark.BookmarkStatus.Deleted);
+            bookmarkRepository.save(bookmark);
+        }
+
+        return new RedirectView("/");
+    }
+
+    @PostMapping("/{id}/markRead")
+    public RedirectView markRead(@PathVariable Integer id) {
+        logger.info("controller=bookmarks action=markRead id=" + id);
+
+        Optional<Bookmark> result = bookmarkRepository.findById(id);
+        if (result.isPresent()) {
+            var bookmark = result.get();
+            bookmark.setStatus(Bookmark.BookmarkStatus.Read);
             bookmarkRepository.save(bookmark);
         }
 

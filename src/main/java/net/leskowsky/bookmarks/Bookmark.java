@@ -16,8 +16,9 @@ public class Bookmark {
     private String url;
 
     enum BookmarkStatus {
-        Unread,
-        Deleted
+        Deleted,
+        Read,
+        Unread
     }
 
     @Enumerated(EnumType.STRING)
