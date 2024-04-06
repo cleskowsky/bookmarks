@@ -34,10 +34,6 @@
 <main>
     <h1>Bookmarks</h1>
 
-    <ul sec:authorize="!isAuthenticated()">
-        <li><a href="/login">Login</a></li>
-    </ul>
-
     <form method="post"
           th:action="@{/new}"
           sec:authorize="isAuthenticated()">
@@ -47,7 +43,13 @@
     </form>
 
     <ul>
-        <li><a href="/?showOnly=Read">Show read</a></li>
+        <li sec:authorize="!isAuthenticated()">
+            <a href="/login">Login</a>
+        </li>
+
+        <li sec:authorize="isAuthenticated()">
+            <a href="/?showOnly=Read">Show read</a>
+        </li>
     </ul>
 
     <p class="flashMessage error"
