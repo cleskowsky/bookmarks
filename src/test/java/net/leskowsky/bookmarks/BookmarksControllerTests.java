@@ -52,9 +52,9 @@ public class BookmarksControllerTests {
     @Test
     @WithMockUser
     public void addBookmark() {
-        var url = "https://addBookmarkTest.leskowsky.net";
-        client.post().uri("/new")
-                .body(fromFormData("url", url))
+        String url = "https://addBookmarkTest.leskowsky.net";
+        String title = "A title";
+        client.get().uri("/new?url={url}&title={title}", url, title)
                 .exchange()
                 .expectStatus().is3xxRedirection();
 
@@ -68,9 +68,9 @@ public class BookmarksControllerTests {
     @Test
     @WithMockUser
     public void addInvalidBookmarkFails() {
-        var url = "a";
-        client.post().uri("/new")
-                .body(fromFormData("url", url))
+        String url = "a";
+        String title = "A title";
+        client.get().uri("/new?url={url}&title={title}", url, title)
                 .exchange()
                 .expectStatus().is3xxRedirection();
 
@@ -105,8 +105,9 @@ public class BookmarksControllerTests {
     @WithMockUser
     public void deleteBookmark() {
         // given a bookmark
-        var url = "https://deleteBookmarkTest.leskowsky.net";
-        var bookmark = bookmarkRepository.save(new Bookmark(url));
+        String url = "https://deleteBookmarkTest.leskowsky.net";
+        String title = "A title";
+        var bookmark = bookmarkRepository.save(new Bookmark(url, title));
 
         // when i delete it
         client.post().uri(String.format("/%d/delete", bookmark.getId()))
