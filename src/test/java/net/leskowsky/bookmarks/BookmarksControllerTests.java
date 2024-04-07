@@ -54,7 +54,9 @@ public class BookmarksControllerTests {
     public void addBookmark() {
         String url = "https://addBookmarkTest.leskowsky.net";
         String title = "A title";
-        client.get().uri("/new?url={url}&title={title}", url, title)
+        client.post().uri("/new")
+                .body(fromFormData("url", url)
+                        .with("title", title))
                 .exchange()
                 .expectStatus().is3xxRedirection();
 
@@ -70,7 +72,9 @@ public class BookmarksControllerTests {
     public void addInvalidBookmarkFails() {
         String url = "a";
         String title = "A title";
-        client.get().uri("/new?url={url}&title={title}", url, title)
+        client.post().uri("/new")
+                .body(fromFormData("url", url)
+                        .with("title", title))
                 .exchange()
                 .expectStatus().is3xxRedirection();
 

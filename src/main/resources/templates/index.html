@@ -49,14 +49,16 @@
 
         <li sec:authorize="isAuthenticated()">
             <a href="javascript: (() => {
-                window.open('http://localhost:8080/new?url=' + encodeURIComponent(window.location) +
+                window.open('https://localhost:8080/new?url=' + encodeURIComponent(window.location) +
                     '&title=' + encodeURIComponent(document.title), '_blank')
-            })();">Bookmarklet dev</a>
+            })();">Pin bookmarklet dev</a>
+        </li>
 
+        <li sec:authorize="isAuthenticated()">
             <a href="javascript: (() => {
                 window.open('https://bm.leskowsky.net/new?url=' + encodeURIComponent(window.location) +
                     '&title=' + encodeURIComponent(document.title), '_blank')
-            })();">Bookmarklet prod</a>
+            })();">Pin bookmarklet</a>
         </li>
     </ul>
 

@@ -38,8 +38,18 @@ public class BookmarksController {
     }
 
     @GetMapping("/new")
+    public ModelAndView addBookmark(String url, String title) {
+        logger.info("request_method=get controller=bookmarks action=new url='{}' title='{}'", url, title);
+
+        return new ModelAndView("new", Map.of(
+                "url", url,
+                "title", title
+        ));
+    }
+
+    @PostMapping("/new")
     public RedirectView addBookmark(String url, String title, RedirectAttributes redirectAttributes) {
-        logger.info("controller=bookmarks action=new url='{}' title='{}'", url, title);
+        logger.info("request_method=post controller=bookmarks action=new url='{}' title='{}'", url, title);
 
         boolean isValid = UrlValidator.validate(url);
         logger.info("is_valid={}", isValid);
@@ -51,7 +61,6 @@ public class BookmarksController {
             redirectAttributes.addFlashAttribute("errorMessage", "Sorry but that doesn't look like a valid url.");
         }
 
-        // Redirect client to bookmarks index page
         return new RedirectView("/");
     }
 
