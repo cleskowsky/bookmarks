@@ -38,14 +38,6 @@
 <main>
     <h1>Bookmarks</h1>
 
-    <form method="post"
-          th:action="@{/new}"
-          sec:authorize="isAuthenticated()">
-        <label for="url">Add a bookmark to my reading list</label>
-        <input type="text" name="url" id="url">
-        <button type="submit">Add</button>
-    </form>
-
     <ul>
         <li sec:authorize="!isAuthenticated()">
             <a href="/login">Login</a>
@@ -53,6 +45,20 @@
 
         <li sec:authorize="isAuthenticated()">
             <a href="/?showOnly=Read">Show read</a>
+        </li>
+
+        <li sec:authorize="isAuthenticated()">
+            <a href="javascript: (() => {
+                window.open('https://localhost:8080/new?url=' + encodeURIComponent(window.location) +
+                    '&title=' + encodeURIComponent(document.title), '_blank')
+            })();">Pin bookmarklet dev</a>
+        </li>
+
+        <li sec:authorize="isAuthenticated()">
+            <a href="javascript: (() => {
+                window.open('https://bm.leskowsky.net/new?url=' + encodeURIComponent(window.location) +
+                    '&title=' + encodeURIComponent(document.title), '_blank')
+            })();">Pin bookmarklet</a>
         </li>
     </ul>
 
@@ -62,7 +68,7 @@
 
     <ul class="bookmarks">
         <li class="card" th:each="bookmark : ${bookmarks}">
-            <a th:href="${bookmark.getUrl()}" th:text="${bookmark.getUrl()}">url</a>
+            <a th:href="${bookmark.getUrl()}" th:text="${bookmark.getTitle()} ?: ${bookmark.getUrl()}"></a>
 
             <ul class="actions"
                 sec:authorize="isAuthenticated()">

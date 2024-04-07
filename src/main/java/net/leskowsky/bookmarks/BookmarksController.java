@@ -12,7 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Controller
 public class BookmarksController {
@@ -38,49 +37,44 @@ public class BookmarksController {
                 Map.of("bookmarks", bookmarkRepository.findByStatusOrderByIdDesc(showOnly)));
     }
 
+    @GetMapping("/new")
+    public ModelAndView addBookmark(String url, String title) {
+        logger.info("request_method=get controller=bookmarks action=new url='{}' title='{}'", url, title);
+
+        return new ModelAndView("new", Map.of(
+                "url", url,
+                "title", title
+        ));
+    }
+
     @PostMapping("/new")
-    public RedirectView addBookmark(String url, RedirectAttributes redirectAttributes) {
-        logger.info("controller=bookmarks action=new url=" + url);
+    public RedirectView addBookmark(String url, String title, RedirectAttributes redirectAttributes) {
+        logger.info("request_method=post controller=bookmarks action=new url='{}' title='{}'", url, title);
 
         boolean isValid = UrlValidator.validate(url);
-        logger.info("is_valid=" + isValid);
+        logger.info("is_valid={}", isValid);
 
         if (isValid) {
-            bookmarkRepository.save(new Bookmark(url));
+            bookmarkRepository.save(new Bookmark(url, title));
         } else {
             // todo: Put in message bundle
             redirectAttributes.addFlashAttribute("errorMessage", "Sorry but that doesn't look like a valid url.");
         }
 
-        // Redirect client to bookmarks index page
         return new RedirectView("/");
     }
 
     @PostMapping("/{id}/delete")
-    public RedirectView deleteBookmark(@PathVariable Integer id) {
+    public RedirectView deleteBookmark(@PathVariable int id) {
         logger.info("controller=bookmarks action=delete id=" + id);
-
-        Optional<Bookmark> result = bookmarkRepository.findById(id);
-        if (result.isPresent()) {
-            var bookmark = result.get();
-            bookmark.setStatus(Bookmark.BookmarkStatus.Deleted);
-            bookmarkRepository.save(bookmark);
-        }
-
+        bookmarkRepository.setStatusById(Bookmark.BookmarkStatus.Deleted, id);
         return new RedirectView("/");
     }
 
     @PostMapping("/{id}/markRead")
-    public RedirectView markRead(@PathVariable Integer id) {
+    public RedirectView markRead(@PathVariable int id) {
         logger.info("controller=bookmarks action=markRead id=" + id);
-
-        Optional<Bookmark> result = bookmarkRepository.findById(id);
-        if (result.isPresent()) {
-            var bookmark = result.get();
-            bookmark.setStatus(Bookmark.BookmarkStatus.Read);
-            bookmarkRepository.save(bookmark);
-        }
-
+        bookmarkRepository.setStatusById(Bookmark.BookmarkStatus.Read, id);
         return new RedirectView("/");
     }
 }

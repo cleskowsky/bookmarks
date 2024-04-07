@@ -15,7 +15,9 @@ public class Bookmark {
 
     private String url;
 
-    enum BookmarkStatus {
+    private String title;
+
+    public enum BookmarkStatus {
         Deleted,
         Read,
         Unread
@@ -29,7 +31,8 @@ public class Bookmark {
     public Bookmark() {
     }
 
-    public Bookmark(String url) {
+    public Bookmark(String url, String title) {
         this.url = url;
+        this.title = title;
     }
 }
