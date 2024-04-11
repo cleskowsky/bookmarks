@@ -54,15 +54,21 @@ public class BookmarksControllerTests {
     public void addBookmark() {
         String url = "https://addBookmarkTest.leskowsky.net";
         String title = "A title";
+        String description = "A description";
         client.post().uri("/new")
                 .body(fromFormData("url", url)
-                        .with("title", title))
+                        .with("title", title)
+                        .with("description", "A description"))
                 .exchange()
                 .expectStatus().is3xxRedirection();
 
         var result = bookmarkRepository.findByUrl(url);
         assertTrue(result.isPresent());
-        assertEquals(url, result.get().getUrl());
+
+        var bookmark = result.get();
+        assertEquals(url, bookmark.getUrl());
+        assertEquals(title, bookmark.getTitle());
+        assertEquals(description, bookmark.getDescription());
         assertEquals(Bookmark.BookmarkStatus.Unread, result.get().getStatus());
     }
 
@@ -111,7 +117,8 @@ public class BookmarksControllerTests {
         // given a bookmark
         String url = "https://deleteBookmarkTest.leskowsky.net";
         String title = "A title";
-        var bookmark = bookmarkRepository.save(new Bookmark(url, title));
+        String description = "A description";
+        var bookmark = bookmarkRepository.save(new Bookmark(url, title, description));
 
         // when i delete it
         client.post().uri(String.format("/%d/delete", bookmark.getId()))

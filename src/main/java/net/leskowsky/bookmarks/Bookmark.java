@@ -14,8 +14,8 @@ public class Bookmark {
     private int id;
 
     private String url;
-
     private String title;
+    private String description;
 
     public enum BookmarkStatus {
         Deleted,
@@ -31,8 +31,9 @@ public class Bookmark {
     public Bookmark() {
     }
 
-    public Bookmark(String url, String title) {
+    public Bookmark(String url, String title, String description) {
         this.url = url;
         this.title = title;
+        this.description = description;
     }
 }

@@ -38,24 +38,30 @@ public class BookmarksController {
     }
 
     @GetMapping("/new")
-    public ModelAndView addBookmark(String url, String title) {
-        logger.info("request_method=get controller=bookmarks action=new url='{}' title='{}'", url, title);
+    public ModelAndView addBookmark(String url, String title,
+                                    @RequestParam(name = "description", defaultValue = "") String description) {
+        logger.info("request_method=get controller=bookmarks action=new url='{}' title='{}' description={}",
+                url, title, description.length());
 
         return new ModelAndView("new", Map.of(
                 "url", url,
-                "title", title
+                "title", title,
+                "description", description
         ));
     }
 
     @PostMapping("/new")
-    public RedirectView addBookmark(String url, String title, RedirectAttributes redirectAttributes) {
-        logger.info("request_method=post controller=bookmarks action=new url='{}' title='{}'", url, title);
+    public RedirectView addBookmark(String url, String title,
+                                    @RequestParam(name = "description", defaultValue = "") String description,
+                                    RedirectAttributes redirectAttributes) {
+        logger.info("request_method=post controller=bookmarks action=new url='{}' title='{}' description={}",
+                url, title, description.length());
 
         boolean isValid = UrlValidator.validate(url);
         logger.info("is_valid={}", isValid);
 
         if (isValid) {
-            bookmarkRepository.save(new Bookmark(url, title));
+            bookmarkRepository.save(new Bookmark(url, title, description));
         } else {
             // todo: Put in message bundle
             redirectAttributes.addFlashAttribute("errorMessage", "Sorry but that doesn't look like a valid url.");

@@ -18,6 +18,11 @@
             margin: 15px auto;
         }
 
+        .card p {
+            margin: 0;
+            padding: 0;
+        }
+
         .actions {
             padding: 0;
         }
@@ -49,7 +54,7 @@
 
         <li sec:authorize="isAuthenticated()">
             <a href="javascript: (() => {
-                window.open('https://localhost:8080/new?url=' + encodeURIComponent(window.location) +
+                window.open('http://localhost:8080/new?url=' + encodeURIComponent(window.location) +
                     '&title=' + encodeURIComponent(document.title), '_blank')
             })();">Pin bookmarklet dev</a>
         </li>
@@ -69,6 +74,9 @@
     <ul class="bookmarks">
         <li class="card" th:each="bookmark : ${bookmarks}">
             <a th:href="${bookmark.getUrl()}" th:text="${bookmark.getTitle()} ?: ${bookmark.getUrl()}"></a>
+
+            <p th:if="${bookmark.getDescription().length() > 0}"
+               th:text="${bookmark.getDescription()}"></p>
 
             <ul class="actions"
                 sec:authorize="isAuthenticated()">
