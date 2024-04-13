@@ -1,5 +1,6 @@
 package net.leskowsky.bookmarks;
 
+import net.leskowsky.bookmarks.dto.CreateBookmarkForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -38,8 +39,11 @@ public class BookmarksController {
     }
 
     @GetMapping("/new")
-    public ModelAndView addBookmark(String url, String title,
-                                    @RequestParam(name = "description", defaultValue = "") String description) {
+    public ModelAndView addBookmark(CreateBookmarkForm createBookmarkForm) {
+        var url = createBookmarkForm.getUrl();
+        var title = createBookmarkForm.getTitle();
+        var description = createBookmarkForm.getDescription();
+
         logger.info("request_method=get controller=bookmarks action=new url='{}' title='{}' description={}",
                 url, title, description.length());
 
@@ -51,9 +55,12 @@ public class BookmarksController {
     }
 
     @PostMapping("/new")
-    public RedirectView addBookmark(String url, String title,
-                                    @RequestParam(name = "description", defaultValue = "") String description,
+    public RedirectView addBookmark(CreateBookmarkForm createBookmarkForm,
                                     RedirectAttributes redirectAttributes) {
+        var url = createBookmarkForm.getUrl();
+        var title = createBookmarkForm.getTitle();
+        var description = createBookmarkForm.getDescription();
+
         logger.info("request_method=post controller=bookmarks action=new url='{}' title='{}' description={}",
                 url, title, description.length());
 
