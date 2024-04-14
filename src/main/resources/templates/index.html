@@ -14,6 +14,11 @@
             margin-bottom: 75px;
         }
 
+        h2 {
+            margin: 40px 0 20px 0;
+            padding: 0;
+        }
+
         .bookmark {
             margin: 15px auto;
         }
@@ -41,15 +46,11 @@
 <body>
 
 <main>
-    <h1>Bookmarks</h1>
+    <h1>My Reading List</h1>
 
     <ul>
         <li sec:authorize="!isAuthenticated()">
             <a href="/login">Login</a>
-        </li>
-
-        <li sec:authorize="isAuthenticated()">
-            <a href="/?showOnly=Read">Show read</a>
         </li>
 
         <li sec:authorize="isAuthenticated()">
@@ -67,10 +68,22 @@
         </li>
     </ul>
 
+    <h2>Filters</h2>
+    <ul>
+        <li class="filter" sec:authorize="isAuthenticated()">
+            <a href="/?showOnly=Read">Read</a>
+        </li>
+
+        <li class="filter">
+            <a href="/?q=video">video</a>
+        </li>
+    </ul>
+
     <p class="flashMessage error"
        th:text="${errorMessage}"
        th:if="${errorMessage}">error</p>
 
+    <h2>Bookmarks</h2>
     <ul>
         <li class="bookmark" th:each="bookmark : ${bookmarks}">
             <a th:href="${bookmark.getUrl()}" th:text="${bookmark.getTitle()} ?: ${bookmark.getUrl()}"></a>

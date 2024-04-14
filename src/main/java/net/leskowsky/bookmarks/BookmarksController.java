@@ -29,16 +29,28 @@ public class BookmarksController {
     }
 
     @GetMapping("/")
-    public ModelAndView getBookmarks(@RequestParam(name = "showOnly", required = false) Bookmark.BookmarkStatus showOnly) {
+    public ModelAndView getBookmarks(@RequestParam(name = "showOnly", required = false) Bookmark.BookmarkStatus showOnly,
+                                     @RequestParam(name = "q", required = false) String q) {
         logger.info("controller=bookmarks action=get");
 
-        if (showOnly == null) {
-            showOnly = Bookmark.BookmarkStatus.Unread;
+        if (q != null) {
+            logger.info("q=" + q);
+            var tag = tagRepository.findByName(q);
+            var bookmarks = bookmarkRepository.findByTagsId(tag.getId());
+            return new ModelAndView("index", Map.of("bookmarks", bookmarks));
         }
-        logger.info("showOnly=" + showOnly);
 
-        var bookmarks = bookmarkRepository.findByStatusOrderByIdDesc(showOnly);
-        return new ModelAndView("index", Map.of("bookmarks", bookmarks));
+        // todo: filters should combine
+        // todo: use q for all kinds of filtering
+        if (showOnly == null) {
+            logger.info("showOnly=Unread");
+            var bookmarks = bookmarkRepository.findByStatusOrderByIdDesc(Bookmark.BookmarkStatus.Unread);
+            return new ModelAndView("index", Map.of("bookmarks", bookmarks));
+        } else {
+            logger.info("showOnly=Read");
+            var bookmarks = bookmarkRepository.findByStatusOrderByIdDesc(Bookmark.BookmarkStatus.Read);
+            return new ModelAndView("index", Map.of("bookmarks", bookmarks));
+        }
     }
 
     @GetMapping("/new")

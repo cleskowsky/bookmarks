@@ -18,4 +18,6 @@ public interface BookmarkRepository extends CrudRepository<Bookmark, Integer> {
     @Transactional
     @Query("update Bookmark set status = ?1 where id = ?2")
     void setStatusById(Bookmark.BookmarkStatus status, int id);
+
+    Iterable<Bookmark> findByTagsId(long id);
 }
