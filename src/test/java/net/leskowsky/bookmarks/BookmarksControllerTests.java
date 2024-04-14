@@ -1,5 +1,6 @@
 package net.leskowsky.bookmarks;
 
+import net.leskowsky.bookmarks.domain.Bookmark;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +106,7 @@ public class BookmarksControllerTests {
     @Test
     public void anonymousUserCantAddBookmarks() {
         client.post().uri("/new")
-                .body(fromFormData("url", "http://www.google.ca"))
+                .body(fromFormData("url", "https://www.google.ca"))
                 .exchange()
                 .expectStatus().is4xxClientError();
     }

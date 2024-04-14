@@ -14,11 +14,16 @@
             margin-bottom: 75px;
         }
 
-        .card {
+        h2 {
+            margin: 40px 0 20px 0;
+            padding: 0;
+        }
+
+        .bookmark {
             margin: 15px auto;
         }
 
-        .card p {
+        .bookmark p {
             margin: 0;
             padding: 0;
         }
@@ -41,15 +46,11 @@
 <body>
 
 <main>
-    <h1>Bookmarks</h1>
+    <h1>My Reading List</h1>
 
     <ul>
         <li sec:authorize="!isAuthenticated()">
             <a href="/login">Login</a>
-        </li>
-
-        <li sec:authorize="isAuthenticated()">
-            <a href="/?showOnly=Read">Show read</a>
         </li>
 
         <li sec:authorize="isAuthenticated()">
@@ -67,16 +68,40 @@
         </li>
     </ul>
 
+    <h2>Filters</h2>
+    <ul>
+        <li class="filter">
+            <a href="/">Unread</a>
+        </li>
+        <li class="filter">
+            <a href="/?showOnly=Read">Read</a>
+        </li>
+        <li>
+            <a href="/?q=book">Books</a>
+        </li>
+        <li>
+            <a href="/?q=code">Source code</a>
+        </li>
+        <li>
+            <a href="/?q=video">Videos</a>
+        </li>
+    </ul>
+
     <p class="flashMessage error"
        th:text="${errorMessage}"
        th:if="${errorMessage}">error</p>
 
-    <ul class="bookmarks">
-        <li class="card" th:each="bookmark : ${bookmarks}">
+    <h2>Bookmarks</h2>
+    <ul>
+        <li class="bookmark" th:each="bookmark : ${bookmarks}">
             <a th:href="${bookmark.getUrl()}" th:text="${bookmark.getTitle()} ?: ${bookmark.getUrl()}"></a>
 
             <p th:if="${bookmark.getDescription().length() > 0}"
                th:text="${bookmark.getDescription()}"></p>
+
+            <ul>
+                <li class="tag" th:each="tag : ${bookmark.getTags()}"><span th:text="${tag.getName()}"/></li>
+            </ul>
 
             <ul class="actions"
                 sec:authorize="isAuthenticated()">

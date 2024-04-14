@@ -25,7 +25,7 @@
 
     <form th:action="@{/new}" method="post">
         <div class="field">
-            <label for="url">Website</label>
+            <label for="url">Url</label>
             <input type="text" name="url" id="url" th:value="${url}">
         </div>
 
@@ -37,6 +37,15 @@
         <div class="field">
             <label for="description">Description</label>
             <textarea name="description" id="description" cols="30" rows="10"></textarea>
+        </div>
+
+        <div class="field">
+            <p>Tags</p>
+            <ul>
+                <li th:each="tag: ${tags}">
+                    <label><input type="checkbox" name="tags[]" th:value="${tag.getId()}"><span th:text="${tag.getName()}" /></label>
+                </li>
+            </ul>
         </div>
 
         <button type="submit">Add</button>
