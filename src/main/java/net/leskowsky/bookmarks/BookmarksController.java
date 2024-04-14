@@ -79,8 +79,11 @@ public class BookmarksController {
         if (isValid) {
             var bookmark = new Bookmark(url, title, description);
             createBookmarkForm.getTagId().forEach(id -> {
-                var tag = tagRepository.findById(id).get();
-                bookmark.getTags().add(tag);
+                var result = tagRepository.findById(id);
+                if (result.isPresent()) {
+                    var tag = result.get();
+                    bookmark.getTags().add(tag);
+                }
             });
             bookmarkRepository.save(bookmark);
         } else {

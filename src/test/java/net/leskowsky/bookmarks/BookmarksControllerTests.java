@@ -106,7 +106,7 @@ public class BookmarksControllerTests {
     @Test
     public void anonymousUserCantAddBookmarks() {
         client.post().uri("/new")
-                .body(fromFormData("url", "http://www.google.ca"))
+                .body(fromFormData("url", "https://www.google.ca"))
                 .exchange()
                 .expectStatus().is4xxClientError();
     }
