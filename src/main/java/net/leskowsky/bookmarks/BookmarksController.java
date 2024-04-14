@@ -78,20 +78,15 @@ public class BookmarksController {
         var title = createBookmarkForm.getTitle();
         var description = createBookmarkForm.getDescription();
 
-        logger.info("request_method=post " +
-                        "controller=bookmarks " +
-                        "action=new url={} " +
-                        "title={} " +
-                        "description={} " +
-                        "tags={}",
-                url, title, description.length(), createBookmarkForm.getTagId());
+        logger.info("request_method=post controller=bookmarks action=new url={} title={} description={} tags={}",
+                url, title, description.length(), createBookmarkForm.getTags());
 
         boolean isValid = UrlValidator.validate(url);
         logger.info("is_valid={}", isValid);
 
         if (isValid) {
             var bookmark = new Bookmark(url, title, description);
-            createBookmarkForm.getTagId().forEach(id -> {
+            createBookmarkForm.getTags().forEach(id -> {
                 var result = tagRepository.findById(id);
                 if (result.isPresent()) {
                     var tag = result.get();
