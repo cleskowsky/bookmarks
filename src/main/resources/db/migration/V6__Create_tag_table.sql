@@ -1,7 +1,7 @@
 create table tag
 (
     id   int generated always as identity primary key,
-    name varchar(256) not null
+    name varchar(256) not null unique
 );
 
 insert into tag (name)

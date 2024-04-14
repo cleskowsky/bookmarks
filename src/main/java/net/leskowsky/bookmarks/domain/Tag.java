@@ -3,8 +3,8 @@ package net.leskowsky.bookmarks.domain;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,13 +16,22 @@ public class Tag {
 
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
-    private Set<Bookmark> bookmarks = new HashSet<>();
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
+    private List<Bookmark> bookmarks = new ArrayList<>();
 
     public Tag() {
     }
 
     public Tag(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", bookmarks=" + bookmarks.size() +
+                '}';
     }
 }

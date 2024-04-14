@@ -1,7 +1,6 @@
 package net.leskowsky.bookmarks;
 
 import net.leskowsky.bookmarks.domain.Bookmark;
-import net.leskowsky.bookmarks.domain.Tag;
 import net.leskowsky.bookmarks.dto.CreateBookmarkForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
-import java.util.Set;
 
 @Controller
 public class BookmarksController {
@@ -40,7 +38,6 @@ public class BookmarksController {
         logger.info("showOnly=" + showOnly);
 
         var bookmarks = bookmarkRepository.findByStatusOrderByIdDesc(showOnly);
-        System.out.println(bookmarks.iterator().next().getTags());
         return new ModelAndView("index", Map.of("bookmarks", bookmarks));
     }
 
@@ -74,15 +71,17 @@ public class BookmarksController {
                         "title={} " +
                         "description={} " +
                         "tags={}",
-                url, title, description.length(), createBookmarkForm.getTagIds());
+                url, title, description.length(), createBookmarkForm.getTagId());
 
         boolean isValid = UrlValidator.validate(url);
         logger.info("is_valid={}", isValid);
 
         if (isValid) {
             var bookmark = new Bookmark(url, title, description);
-            var tag = tagRepository.findById(1);
-            bookmark.getTags().add(tag.get());
+            createBookmarkForm.getTagId().forEach(id -> {
+                var tag = tagRepository.findById(id).get();
+                bookmark.getTags().add(tag);
+            });
             bookmarkRepository.save(bookmark);
         } else {
             // todo: Put in message bundle

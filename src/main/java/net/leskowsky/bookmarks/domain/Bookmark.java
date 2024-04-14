@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,9 +22,9 @@ public class Bookmark {
     @ManyToMany
     @JoinTable(
             name = "bookmark_tag",
-            joinColumns = @JoinColumn(name = "bookmark_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new HashSet<>();
+            joinColumns = {@JoinColumn(name = "bookmark_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")})
+    private List<Tag> tags = new ArrayList<>();
 
     public enum BookmarkStatus {
         Deleted, Read, Unread
@@ -42,5 +42,18 @@ public class Bookmark {
         this.url = url;
         this.title = title;
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Bookmark{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", tags=" + tags.size() +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

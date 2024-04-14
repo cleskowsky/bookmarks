@@ -45,7 +45,7 @@
             <p>Tags</p>
             <ul>
                 <li th:each="tag: ${tags}">
-                    <label><input type="checkbox" name="tags[]" th:value="${tag.getId()}"><span th:text="${tag.getName()}" /></label>
+                    <label><input type="checkbox" name="tagId[]" th:value="${tag.getId()}"><span th:text="${tag.getName()}" /></label>
                 </li>
             </ul>
         </div>

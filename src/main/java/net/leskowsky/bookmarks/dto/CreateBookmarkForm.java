@@ -10,5 +10,5 @@ public class CreateBookmarkForm {
     String url;
     String title = "";
     String description = "";
-    List<Integer> tagIds = new ArrayList<>();
+    List<Integer> tagId = new ArrayList<>();
 }
