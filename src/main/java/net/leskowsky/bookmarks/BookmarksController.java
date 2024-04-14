@@ -33,6 +33,8 @@ public class BookmarksController {
                                      @RequestParam(name = "q", required = false) String q) {
         logger.info("controller=bookmarks action=get");
 
+        // todo: make a parser for q that makes a query filter
+        // todo: use q for all filtering
         if (q != null) {
             logger.info("q=" + q);
             var tag = tagRepository.findByName(q);
@@ -41,7 +43,6 @@ public class BookmarksController {
         }
 
         // todo: filters should combine
-        // todo: use q for all kinds of filtering
         if (showOnly == null) {
             logger.info("showOnly=Unread");
             var bookmarks = bookmarkRepository.findByStatusOrderByIdDesc(Bookmark.BookmarkStatus.Unread);

@@ -70,12 +70,17 @@
 
     <h2>Filters</h2>
     <ul>
-        <li class="filter" sec:authorize="isAuthenticated()">
+        <li class="filter">
+            <a href="/">Unread</a>
+        </li>
+        <li class="filter">
             <a href="/?showOnly=Read">Read</a>
         </li>
-
-        <li class="filter">
-            <a href="/?q=video">video</a>
+        <li>
+            <a href="/?q=book">books</a>
+        </li>
+        <li>
+            <a href="/?q=video">videos</a>
         </li>
     </ul>
 
