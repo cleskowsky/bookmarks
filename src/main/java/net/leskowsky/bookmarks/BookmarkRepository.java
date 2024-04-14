@@ -1,6 +1,7 @@
 package net.leskowsky.bookmarks;
 
 import jakarta.transaction.Transactional;
+import net.leskowsky.bookmarks.domain.Bookmark;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

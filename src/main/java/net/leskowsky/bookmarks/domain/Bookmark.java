@@ -1,9 +1,11 @@
-package net.leskowsky.bookmarks;
+package net.leskowsky.bookmarks.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -11,16 +13,21 @@ public class Bookmark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     private String url;
     private String title;
     private String description;
 
+    @ManyToMany
+    @JoinTable(
+            name = "bookmark_tag",
+            joinColumns = @JoinColumn(name = "bookmark_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>();
+
     public enum BookmarkStatus {
-        Deleted,
-        Read,
-        Unread
+        Deleted, Read, Unread
     }
 
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,7 @@
 package net.leskowsky.bookmarks;
 
+import net.leskowsky.bookmarks.domain.Bookmark;
+import net.leskowsky.bookmarks.domain.Tag;
 import net.leskowsky.bookmarks.dto.CreateBookmarkForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class BookmarksController {
@@ -20,9 +23,11 @@ public class BookmarksController {
     private final Logger logger = LoggerFactory.getLogger(BookmarksController.class);
 
     private final BookmarkRepository bookmarkRepository;
+    private final TagRepository tagRepository;
 
-    public BookmarksController(BookmarkRepository bookmarkRepository) {
+    public BookmarksController(BookmarkRepository bookmarkRepository, TagRepository tagRepository) {
         this.bookmarkRepository = bookmarkRepository;
+        this.tagRepository = tagRepository;
     }
 
     @GetMapping("/")
@@ -34,8 +39,9 @@ public class BookmarksController {
         }
         logger.info("showOnly=" + showOnly);
 
-        return new ModelAndView("index",
-                Map.of("bookmarks", bookmarkRepository.findByStatusOrderByIdDesc(showOnly)));
+        var bookmarks = bookmarkRepository.findByStatusOrderByIdDesc(showOnly);
+        System.out.println(bookmarks.iterator().next().getTags());
+        return new ModelAndView("index", Map.of("bookmarks", bookmarks));
     }
 
     @GetMapping("/new")
@@ -44,13 +50,14 @@ public class BookmarksController {
         var title = createBookmarkForm.getTitle();
         var description = createBookmarkForm.getDescription();
 
-        logger.info("request_method=get controller=bookmarks action=new url='{}' title='{}' description={}",
+        logger.info("request_method=get controller=bookmarks action=new url={} title={} description={}",
                 url, title, description.length());
 
         return new ModelAndView("new", Map.of(
                 "url", url,
                 "title", title,
-                "description", description
+                "description", description,
+                "tags", tagRepository.findAll()
         ));
     }
 
@@ -61,17 +68,25 @@ public class BookmarksController {
         var title = createBookmarkForm.getTitle();
         var description = createBookmarkForm.getDescription();
 
-        logger.info("request_method=post controller=bookmarks action=new url='{}' title='{}' description={}",
-                url, title, description.length());
+        logger.info("request_method=post " +
+                        "controller=bookmarks " +
+                        "action=new url={} " +
+                        "title={} " +
+                        "description={} " +
+                        "tags={}",
+                url, title, description.length(), createBookmarkForm.getTagIds());
 
         boolean isValid = UrlValidator.validate(url);
         logger.info("is_valid={}", isValid);
 
         if (isValid) {
-            bookmarkRepository.save(new Bookmark(url, title, description));
+            var bookmark = new Bookmark(url, title, description);
+            var tag = tagRepository.findById(1);
+            bookmark.getTags().add(tag.get());
+            bookmarkRepository.save(bookmark);
         } else {
             // todo: Put in message bundle
-            redirectAttributes.addFlashAttribute("errorMessage", "Sorry but that doesn't look like a valid url.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Invalid url");
         }
 
         return new RedirectView("/");
