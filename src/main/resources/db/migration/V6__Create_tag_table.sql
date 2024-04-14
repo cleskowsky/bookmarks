@@ -5,8 +5,7 @@ create table tag
 );
 
 insert into tag (name)
-values ('video'),
-       ('book');
+values ('video'), ('book'), ('code');
 
 create table bookmark_tag
 (
