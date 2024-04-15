@@ -8,40 +8,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bookmarks</title>
-
-    <style>
-        body {
-            margin-bottom: 75px;
-        }
-
-        h2 {
-            margin: 40px 0 20px 0;
-            padding: 0;
-        }
-
-        .bookmark {
-            margin: 15px auto;
-        }
-
-        .bookmark p {
-            margin: 0;
-            padding: 0;
-        }
-
-        .actions {
-            padding: 0;
-        }
-
-        .actions li {
-            display: inline-block;
-            list-style: none;
-            margin: 5px 3px 0 0;
-        }
-
-        form {
-            display: inline;
-        }
-    </style>
+    <link rel="stylesheet" href="/app.css">
 </head>
 <body>
 
@@ -109,6 +76,10 @@
                     <form th:action="@{/{id}/markRead(id=${bookmark.getId()})}" method="post">
                         <button type="submit">Mark read</button>
                     </form>
+                </li>
+
+                <li>
+                    <a th:href="@{/{id}/edit(id=${bookmark.getId()})}">Edit</a>
                 </li>
 
                 <li>
