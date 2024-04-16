@@ -23,27 +23,33 @@
 <main>
     <p>Add a website to my reading list</p>
 
-    <form th:action="@{/edit}" method="post">
+    <form th:action="@{/{id}/edit(id=${bm.getId()})}" method="post">
         <div class="field">
             <label for="url">Url</label>
-            <input type="text" name="url" id="url" th:value="${url}">
+            <input type="text" name="url" id="url" th:value="${bm.getUrl()}">
         </div>
 
         <div class="field">
             <label for="title">Title</label>
-            <input type="text" name="title" id="title" th:value="${title}">
+            <input type="text" name="title" id="title"
+                   th:value="${bm.getTitle()}">
         </div>
 
         <div class="field">
             <label for="description">Description</label>
-            <textarea name="description" id="description" cols="30" rows="10"></textarea>
+            <textarea name="description" id="description" cols="30" rows="10"
+                      th:text="${bm.getDescription()}"></textarea>
         </div>
 
         <div class="field">
             <p>Tags</p>
             <ul>
-                <li th:each="tag: ${tags}">
-                    <label><input type="checkbox" name="tags[]" th:value="${tag.getId()}"><span th:text="${tag.getName()}" /></label>
+                <li th:each="tag: ${allTags}">
+                    <label><input type="checkbox"
+                                  name="tags[]"
+                                  th:value="${tag.getId()}"
+                                  th:checked="${bm.getTags().contains(tag) ? 'checked' : false}"><span
+                            th:text="${tag.getName()}"/></label>
                 </li>
             </ul>
         </div>

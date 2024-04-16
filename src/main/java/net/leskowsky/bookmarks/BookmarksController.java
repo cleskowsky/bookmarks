@@ -13,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 @Controller
@@ -97,6 +99,45 @@ public class BookmarksController {
         } else {
             // todo: Put in message bundle
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid url");
+        }
+
+        return new RedirectView("/");
+    }
+
+    @GetMapping("/{id}/edit")
+    public ModelAndView editBookmark(@PathVariable int id,
+                                     RedirectAttributes redirectAttributes) {
+        logger.info("request_method=get controller=bookmarks action=edit id={}", id);
+
+        var result = bookmarkRepository.findById(id);
+        if (result.isPresent()) {
+            var bookmark = result.get();
+            return new ModelAndView("edit", Map.of(
+                    "bm", bookmark,
+                    "allTags", tagRepository.findAll()
+            ));
+        }
+
+        redirectAttributes.addFlashAttribute("errorMessage", "Invalid id");
+        return new ModelAndView("index");
+    }
+
+    @PostMapping("/{id}/edit")
+    public RedirectView editBookmark(@PathVariable int id,
+                                     CreateBookmarkForm bookmarkForm) {
+        logger.info("request_method=post controller=bookmarks action=edit id={}", id);
+
+        var result = bookmarkRepository.findById(id);
+        if (result.isPresent()) {
+            var bm = result.get();
+            bm.setTitle(bookmarkForm.getTitle());
+            bm.setUrl(bookmarkForm.getUrl());
+            bm.setDescription(bookmarkForm.getDescription());
+            bm.getTags().clear();
+            bookmarkForm.getTags().forEach(tagId -> {
+                bm.getTags().add(tagRepository.findById(tagId).get());
+            });
+            bookmarkRepository.save(bm);
         }
 
         return new RedirectView("/");
