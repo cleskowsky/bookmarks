@@ -1,0 +1,39 @@
+body {
+    margin-bottom: 75px;
+}
+
+h2 {
+    margin: 40px 0 20px 0;
+    padding: 0;
+}
+
+.bookmark {
+    margin: 15px auto;
+}
+
+.bookmark p {
+    margin: 0;
+    padding: 0;
+}
+
+.actions {
+    padding: 0;
+}
+
+.actions li {
+    display: inline-block;
+    list-style: none;
+    margin: 5px 3px 0 0;
+}
+
+form {
+    display: inline;
+}
+
+.field {
+    margin: 15px 0;
+}
+
+.field label {
+    display: block;
+}
