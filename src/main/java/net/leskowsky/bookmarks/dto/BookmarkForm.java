@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class CreateBookmarkForm {
+public class BookmarkForm {
     String url;
     String title = "";
     String description = "";

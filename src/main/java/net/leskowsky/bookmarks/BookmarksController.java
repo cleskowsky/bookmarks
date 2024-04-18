@@ -1,7 +1,7 @@
 package net.leskowsky.bookmarks;
 
 import net.leskowsky.bookmarks.domain.Bookmark;
-import net.leskowsky.bookmarks.dto.CreateBookmarkForm;
+import net.leskowsky.bookmarks.dto.BookmarkForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -13,8 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
 
 @Controller
@@ -57,10 +55,10 @@ public class BookmarksController {
     }
 
     @GetMapping("/new")
-    public ModelAndView addBookmark(CreateBookmarkForm createBookmarkForm) {
-        var url = createBookmarkForm.getUrl();
-        var title = createBookmarkForm.getTitle();
-        var description = createBookmarkForm.getDescription();
+    public ModelAndView addBookmark(BookmarkForm form) {
+        var url = form.getUrl();
+        var title = form.getTitle();
+        var description = form.getDescription();
 
         logger.info("request_method=get controller=bookmarks action=new url={} title={} description={}",
                 url, title, description.length());
@@ -74,21 +72,21 @@ public class BookmarksController {
     }
 
     @PostMapping("/new")
-    public RedirectView addBookmark(CreateBookmarkForm createBookmarkForm,
+    public RedirectView addBookmark(BookmarkForm form,
                                     RedirectAttributes redirectAttributes) {
-        var url = createBookmarkForm.getUrl();
-        var title = createBookmarkForm.getTitle();
-        var description = createBookmarkForm.getDescription();
+        var url = form.getUrl();
+        var title = form.getTitle();
+        var description = form.getDescription();
 
         logger.info("request_method=post controller=bookmarks action=new url={} title={} description={} tags={}",
-                url, title, description.length(), createBookmarkForm.getTags());
+                url, title, description.length(), form.getTags());
 
         boolean isValid = UrlValidator.validate(url);
         logger.info("is_valid={}", isValid);
 
         if (isValid) {
             var bookmark = new Bookmark(url, title, description);
-            createBookmarkForm.getTags().forEach(id -> {
+            form.getTags().forEach(id -> {
                 var result = tagRepository.findById(id);
                 if (result.isPresent()) {
                     var tag = result.get();
@@ -123,18 +121,17 @@ public class BookmarksController {
     }
 
     @PostMapping("/{id}/edit")
-    public RedirectView editBookmark(@PathVariable int id,
-                                     CreateBookmarkForm bookmarkForm) {
+    public RedirectView editBookmark(@PathVariable int id, BookmarkForm form) {
         logger.info("request_method=post controller=bookmarks action=edit id={}", id);
 
         var result = bookmarkRepository.findById(id);
         if (result.isPresent()) {
             var bm = result.get();
-            bm.setTitle(bookmarkForm.getTitle());
-            bm.setUrl(bookmarkForm.getUrl());
-            bm.setDescription(bookmarkForm.getDescription());
+            bm.setTitle(form.getTitle());
+            bm.setUrl(form.getUrl());
+            bm.setDescription(form.getDescription());
             bm.getTags().clear();
-            bookmarkForm.getTags().forEach(tagId -> {
+            form.getTags().forEach(tagId -> {
                 bm.getTags().add(tagRepository.findById(tagId).get());
             });
             bookmarkRepository.save(bm);
