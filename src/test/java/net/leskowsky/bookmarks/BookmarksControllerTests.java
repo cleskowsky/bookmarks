@@ -128,7 +128,6 @@ public class BookmarksControllerTests {
 
         // then it's status is deleted
         var result = bookmarkRepository.findByUrl(url);
-        assertTrue(result.isPresent());
-        assertEquals(Bookmark.BookmarkStatus.Deleted, result.get().getStatus());
+        assertTrue(result.isEmpty());
     }
 }

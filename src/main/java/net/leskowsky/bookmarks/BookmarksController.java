@@ -143,7 +143,7 @@ public class BookmarksController {
     @PostMapping("/{id}/delete")
     public RedirectView deleteBookmark(@PathVariable int id) {
         logger.info("controller=bookmarks action=delete id=" + id);
-        bookmarkRepository.setStatusById(Bookmark.BookmarkStatus.Deleted, id);
+        bookmarkRepository.deleteById(id);
         return new RedirectView("/");
     }
 
