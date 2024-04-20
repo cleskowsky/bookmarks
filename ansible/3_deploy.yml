@@ -17,6 +17,7 @@
       copy:
         content: |
           spring.datasource.url=jdbc:h2:file:/var/lib/bookmarks.db
+          spring.profiles.active=prod
           SecurityConfiguration.userName={{ user }}
           SecurityConfiguration.password={{ password }}
           version={{ git_version }}

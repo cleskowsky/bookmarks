@@ -6,6 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -55,5 +56,11 @@ public class Bookmark {
                 ", status=" + status +
                 ", createdAt=" + createdAt +
                 '}';
+    }
+
+    public String getTagsAsString() {
+        return tags.stream()
+                .map(Tag::getName)
+                .collect(Collectors.joining(", "));
     }
 }

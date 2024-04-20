@@ -16,9 +16,9 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class SecurityConfiguration {
+public class Security {
 
-    private final Logger logger = LoggerFactory.getLogger(SecurityConfiguration.class);
+    private final Logger logger = LoggerFactory.getLogger(Security.class);
 
     @Value("${SecurityConfiguration.userName}")
     private String userName;
