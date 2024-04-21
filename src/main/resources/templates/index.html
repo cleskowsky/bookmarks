@@ -54,7 +54,8 @@
             <!-- actions -->
             <ul sec:authorize="isAuthenticated()"
                 class="flex justify-center mt-3">
-                <li class="inline-flex border-2 border-solid rounded py-px px-2 mx-0.5">
+                <li class="inline-flex border-2 border-solid rounded py-px px-2 mx-0.5"
+                    th:if="${bookmark.isUnread()}">
                     <form th:action="@{/{id}/markRead(id=${bookmark.getId()})}" method="post">
                         <button type="submit">Mark Read</button>
                     </form>

@@ -63,4 +63,9 @@ public class Bookmark {
                 .map(Tag::getName)
                 .collect(Collectors.joining(", "));
     }
+
+    public boolean isUnread() {
+        return status == BookmarkStatus.Unread ||
+                status == null;
+    }
 }
