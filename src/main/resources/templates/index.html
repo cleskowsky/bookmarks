@@ -33,16 +33,16 @@
 
     <ul id="bookmarks" class="text-left">
         <li th:each="bookmark : ${bookmarks}"
-            class="list-none w-3/4 border-slate-300 border-dotted border-2 rounded-md mx-auto p-3 mb-3">
+            class="list-none w-1/2 border-slate-300 border-dotted border-2 rounded-md mx-auto p-3 mb-3">
             <!-- title, tags -->
             <div>
                 <a th:href="${bookmark.getUrl()}"
                    th:text="${bookmark.getTitle()} ?: ${bookmark.getUrl()}"
-                   class="text-xl block"></a>
+                   class="text-xl"></a>
 
                 <i th:if="${!bookmark.getTags().isEmpty()}"
                    class="text-xs">
-                    tags: <span th:text="${bookmark.getTagsAsString()}"></span>
+                    (tags: <span th:text="${bookmark.getTagsAsString()}"></span>)
                 </i>
             </div>
 

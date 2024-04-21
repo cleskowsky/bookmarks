@@ -28,28 +28,14 @@
     Will be replaced with template content by Thymeleaf
 </main>
 
-<ul sec:authorize="isAuthenticated()" class="m-8">
-    <li>
-        <script th:inline="javascript">
-            /*<![CDATA[*/
-            var homeUrl = /*[[${@app.homeUrl}]]*/;
-
-            function addBookmark() {
-                window.open(homeUrl + '/new?url=' + encodeURIComponent(window.location) +
-                    '&title=' + encodeURIComponent(document.title), '_blank');
-            }
-
-            /*]]>*/
-        </script>
-
-        <a href="javascript: (() => addBookmark())();">Pin bookmarklet</a>
-
-        <a th:inline="javascript" href="javascript: (() => {
-            window.open(/*[[${@app.homeUrl}]]*/ + '/new?url=' + encodeURIComponent(window.location) +
-                    '&title=' + encodeURIComponent(document.title), '_blank');
-        })();">hello</a>
-    </li>
-</ul>
+<p sec:authorize="isAuthenticated()" class="m-8" id="bookmarklet">
+    <script th:inline="text">
+        const anchor = document.createElement("a");
+        anchor.href = "javascript: (() => { window.open('[[${@app.homeUrl}]]/new?url=' + encodeURIComponent(window.location) + '&title=' + encodeURIComponent(document.title), '_blank'); })();";
+        anchor.text = 'Pin bookmarklet';
+        document.getElementById('bookmarklet').appendChild(anchor);
+    </script>
+</p>
 
 </body>
 </html>
