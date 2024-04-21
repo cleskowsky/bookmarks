@@ -7,82 +7,64 @@
 <body>
 
 <main layout:fragment="content">
-    <h1>My reading list</h1>
-
-    <ul>
-        <li sec:authorize="!isAuthenticated()">
+    <ul sec:authorize="!isAuthenticated()">
+        <li>
             <a href="/login">Login</a>
         </li>
-
-        <li sec:authorize="isAuthenticated()">
-            <a href="javascript: (() => {
-                window.open('http://localhost:8080/new?url=' + encodeURIComponent(window.location) +
-                    '&title=' + encodeURIComponent(document.title), '_blank')
-            })();">Pin bookmarklet dev</a>
-        </li>
-
-        <li sec:authorize="isAuthenticated()">
-            <a href="javascript: (() => {
-                window.open('https://bm.leskowsky.net/new?url=' + encodeURIComponent(window.location) +
-                    '&title=' + encodeURIComponent(document.title), '_blank')
-            })();">Pin bookmarklet</a>
-        </li>
     </ul>
 
-    <h2>Filters</h2>
-    <ul>
-        <li class="filter">
-            <a href="/">Unread</a>
-        </li>
-        <li class="filter">
-            <a href="/?showOnly=Read">Read</a>
-        </li>
-        <li>
-            <a href="/?q=book">Books</a>
-        </li>
-        <li>
-            <a href="/?q=code">Source code</a>
-        </li>
-        <li>
-            <a href="/?q=video">Videos</a>
-        </li>
-        <li>
-            <a href="/?q=linux">Linux</a>
-        </li>
-        <li>
-            <a href="/?q=manga">Manga</a>
-        </li>
-    </ul>
+    <div class="m-5">
+        <ul id="filters">
+            <li>
+                <a href="/">Unread</a>
+                <a href="/?showOnly=Read">Read</a>
+                <a href="/?q=book">Books</a>
+                <a href="/?q=code">Code</a>
+                <a href="/?q=video">Videos</a>
+                <a href="/?q=linux">Linux</a>
+                <a href="/?q=manga">Manga</a>
+            </li>
+        </ul>
+    </div>
 
     <p class="flashMessage error"
        th:text="${errorMessage}"
        th:if="${errorMessage}">error</p>
 
-    <h2>Bookmarks</h2>
-    <ul>
-        <li class="bookmark" th:each="bookmark : ${bookmarks}">
-            <a th:href="${bookmark.getUrl()}" th:text="${bookmark.getTitle()} ?: ${bookmark.getUrl()}"></a>
+    <ul id="bookmarks" class="text-left">
+        <li th:each="bookmark : ${bookmarks}"
+            class="list-none w-1/2 border-slate-300 border-dotted border-2 rounded-md mx-auto p-3 mb-3">
+            <!-- title, tags -->
+            <div>
+                <a th:href="${bookmark.getUrl()}"
+                   th:text="${bookmark.getTitle()} ?: ${bookmark.getUrl()}"
+                   class="text-xl"></a>
 
+                <i th:if="${!bookmark.getTags().isEmpty()}"
+                   class="text-xs">
+                    (tags: <span th:text="${bookmark.getTagsAsString()}"></span>)
+                </i>
+            </div>
+
+            <!-- description -->
             <p th:if="${bookmark.getDescription().length() > 0}"
-               th:text="${bookmark.getDescription()}"></p>
+               th:text="${bookmark.getDescription()}"
+               class="my-1"></p>
 
-            <ul>
-                <li class="tag" th:each="tag : ${bookmark.getTags()}"><span th:text="${tag.getName()}"/></li>
-            </ul>
-
-            <ul class="actions"
-                sec:authorize="isAuthenticated()">
-                <li>
+            <!-- actions -->
+            <ul sec:authorize="isAuthenticated()"
+                class="flex justify-center mt-3">
+                <li class="inline-flex border-2 border-solid rounded py-px px-2 mx-0.5">
                     <form th:action="@{/{id}/markRead(id=${bookmark.getId()})}" method="post">
-                        <button type="submit">Mark read</button>
+                        <button type="submit">Mark Read</button>
                     </form>
                 </li>
 
-                <li>
+                <li class="inline-flex border-2 border-solid rounded py-px px-2 mx-0.5">
                     <a th:href="@{/{id}/edit(id=${bookmark.getId()})}">Edit</a>
                 </li>
 
-                <li>
+                <li class="inline-flex border-2 border-solid rounded py-px px-2 mx-0.5">
                     <form th:action="@{/{id}/delete(id=${bookmark.getId()})}" method="post">
                         <button type="submit">Delete</button>
                     </form>
@@ -90,6 +72,7 @@
             </ul>
         </li>
     </ul>
+
 </main>
 
 </body>
