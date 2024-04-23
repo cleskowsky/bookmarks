@@ -33,16 +33,16 @@
 
     <ul id="bookmarks" class="text-left">
         <li th:each="bookmark : ${bookmarks}"
-            class="list-none w-1/2 border-slate-300 border-dotted border-2 rounded-md mx-auto p-3 mb-3">
+            class="list-none w-full lg:w-1/3 border-slate-300 border-dotted border-2 rounded-md mx-auto p-3 mb-6">
             <!-- title, tags -->
             <div>
                 <a th:href="${bookmark.getUrl()}"
                    th:text="${bookmark.getTitle()} ?: ${bookmark.getUrl()}"
-                   class="text-xl"></a>
+                   class="text-base"></a>
 
                 <i th:if="${!bookmark.getTags().isEmpty()}"
-                   class="text-xs">
-                    (tags: <span th:text="${bookmark.getTagsAsString()}"></span>)
+                   class="text-xs block">
+                    <span th:text="${bookmark.getTagsAsString()}"></span>
                 </i>
             </div>
 
@@ -54,20 +54,20 @@
             <!-- actions -->
             <ul sec:authorize="isAuthenticated()"
                 class="flex justify-center mt-3">
-                <li class="inline-flex border-2 border-solid rounded py-px px-2 mx-0.5"
+                <li class="inline-flex border-2 border-solid rounded px-2 mx-0.5"
                     th:if="${bookmark.isUnread()}">
                     <form th:action="@{/{id}/markRead(id=${bookmark.getId()})}" method="post">
-                        <button type="submit">Mark Read</button>
+                        <button type="submit" class="text-sm">Mark Read</button>
                     </form>
                 </li>
 
-                <li class="inline-flex border-2 border-solid rounded py-px px-2 mx-0.5">
-                    <a th:href="@{/{id}/edit(id=${bookmark.getId()})}">Edit</a>
+                <li class="inline-flex border-2 border-solid rounded px-2 mx-0.5">
+                    <a th:href="@{/{id}/edit(id=${bookmark.getId()})}" class="text-sm content-center">Edit</a>
                 </li>
 
-                <li class="inline-flex border-2 border-solid rounded py-px px-2 mx-0.5">
+                <li class="inline-flex border-2 border-solid rounded px-2 mx-0.5">
                     <form th:action="@{/{id}/delete(id=${bookmark.getId()})}" method="post">
-                        <button type="submit">Delete</button>
+                        <button type="submit" class="text-sm">Delete</button>
                     </form>
                 </li>
             </ul>
