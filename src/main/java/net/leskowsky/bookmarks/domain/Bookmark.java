@@ -34,7 +34,7 @@ public class Bookmark {
     @Enumerated(EnumType.STRING)
     private BookmarkStatus status = BookmarkStatus.Unread;
 
-    private LocalDateTime createdAt = LocalDateTime.now().plusDays(10);
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public Bookmark() {
     }
