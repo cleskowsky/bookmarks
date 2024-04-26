@@ -1,0 +1,1 @@
+insert into tag (name) values ('git');
