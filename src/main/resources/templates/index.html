@@ -24,6 +24,7 @@
                 <a href="/?q=linux">Linux</a>
                 <a href="/?q=manga">Manga</a>
                 <a href="/?q=git">Git</a>
+                <a href="/?q=papers">Papers</a>
             </li>
         </ul>
     </div>
@@ -34,7 +35,7 @@
 
     <ul id="bookmarks" class="text-left">
         <li th:each="bookmark : ${bookmarks}"
-            class="list-none w-full lg:w-1/3 border-slate-300 border-dotted border-2 rounded-md mx-auto p-3 mb-6">
+            class="list-none w-full lg:w-1/2 border-slate-300 border-dotted border-2 rounded-md mx-auto p-3 mb-6">
             <!-- title, tags -->
             <div>
                 <a th:href="${bookmark.getUrl()}"
