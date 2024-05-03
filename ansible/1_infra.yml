@@ -52,6 +52,7 @@
         tags:
           App: bookmarks
           Env: prod
+          BackedUp: yes
           Ansible: 1
       register: vm
 
