@@ -63,4 +63,5 @@ public class BookmarkRepositoryTests {
 
     // with read filter, get read bookmarks sorted by date desc
     // with read and tag filters, get bookmarks that have been read with tag by date desc
+    // editing a bookmark should preserve tags selected
 }
