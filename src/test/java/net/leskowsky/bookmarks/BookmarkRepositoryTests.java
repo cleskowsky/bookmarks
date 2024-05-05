@@ -5,12 +5,14 @@ import net.leskowsky.bookmarks.domain.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
+@Transactional
 public class BookmarkRepositoryTests {
 
     @Autowired
@@ -54,14 +56,10 @@ public class BookmarkRepositoryTests {
         bookmarkRepository.save(bm);
 
         // when I fetch them from the db
-        var bookmarks = bookmarkRepository.findByTagsId(tag.getId());
+        var bookmarks = bookmarkRepository.findByTagsIdOrderByIdDesc(tag.getId());
 
         // then I should get them back in most recent first order
         assertEquals(2, bookmarks.size());
         assertEquals("url2", bookmarks.get(0).getUrl());
     }
-
-    // with read filter, get read bookmarks sorted by date desc
-    // with read and tag filters, get bookmarks that have been read with tag by date desc
-    // editing a bookmark should preserve tags selected
 }
