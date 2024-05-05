@@ -130,4 +130,7 @@ public class BookmarksControllerTests {
         var result = bookmarkRepository.findByUrl(url);
         assertTrue(result.isEmpty());
     }
+
+    // todo: editing then save should preserve tags selected
+    // todo: marking read show preserve tags selected
 }

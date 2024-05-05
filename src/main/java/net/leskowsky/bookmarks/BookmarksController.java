@@ -30,16 +30,19 @@ public class BookmarksController {
 
     @GetMapping("/")
     public ModelAndView getBookmarks(@RequestParam(name = "showOnly", required = false) Bookmark.BookmarkStatus showOnly,
-                                     @RequestParam(name = "q", required = false) String q) {
+                                     @RequestParam(name = "q", defaultValue = "") String q) {
         logger.info("controller=bookmarks action=get");
 
         // todo: make a parser for q that makes a query filter
         // todo: use q for all filtering
-        if (q != null) {
+        if (!q.isEmpty()) {
             logger.info("q=" + q);
             var tag = tagRepository.findByName(q);
-            var bookmarks = bookmarkRepository.findByTagsId(tag.getId());
-            return new ModelAndView("index", Map.of("bookmarks", bookmarks));
+            var bookmarks = bookmarkRepository.findByTagsIdOrderByIdDesc(tag.getId());
+            return new ModelAndView("index", Map.of(
+                    "bookmarks", bookmarks,
+                    "q", q
+            ));
         }
 
         // todo: filters should combine
@@ -104,7 +107,8 @@ public class BookmarksController {
 
     @GetMapping("/{id}/edit")
     public ModelAndView editBookmark(@PathVariable int id,
-                                     RedirectAttributes redirectAttributes) {
+                                     RedirectAttributes redirectAttributes,
+                                     @RequestParam(defaultValue = "") String q) {
         logger.info("request_method=get controller=bookmarks action=edit id={}", id);
 
         var result = bookmarkRepository.findById(id);
@@ -112,16 +116,19 @@ public class BookmarksController {
             var bookmark = result.get();
             return new ModelAndView("edit", Map.of(
                     "bm", bookmark,
-                    "allTags", tagRepository.findAll()
+                    "allTags", tagRepository.findAll(),
+                    "q", q
             ));
         }
 
         redirectAttributes.addFlashAttribute("errorMessage", "Invalid id");
-        return new ModelAndView("index");
+        return new ModelAndView("index", Map.of("q", q));
     }
 
     @PostMapping("/{id}/edit")
-    public RedirectView editBookmark(@PathVariable int id, BookmarkForm form) {
+    public RedirectView editBookmark(@PathVariable int id,
+                                     BookmarkForm form,
+                                     @RequestParam(defaultValue = "") String q) {
         logger.info("request_method=post controller=bookmarks action=edit id={}", id);
 
         var result = bookmarkRepository.findById(id);
@@ -137,20 +144,22 @@ public class BookmarksController {
             bookmarkRepository.save(bm);
         }
 
-        return new RedirectView("/");
+        return new RedirectView("/?q=" + q);
     }
 
     @PostMapping("/{id}/delete")
-    public RedirectView deleteBookmark(@PathVariable int id) {
+    public RedirectView deleteBookmark(@PathVariable int id,
+                                       @RequestParam(defaultValue = "") String q) {
         logger.info("controller=bookmarks action=delete id=" + id);
         bookmarkRepository.deleteById(id);
-        return new RedirectView("/");
+        return new RedirectView("/?q=" + q);
     }
 
     @PostMapping("/{id}/markRead")
-    public RedirectView markRead(@PathVariable int id) {
+    public RedirectView markRead(@PathVariable int id,
+                                 @RequestParam(defaultValue = "") String q) {
         logger.info("controller=bookmarks action=markRead id=" + id);
         bookmarkRepository.setStatusById(Bookmark.BookmarkStatus.Read, id);
-        return new RedirectView("/");
+        return new RedirectView("/?q=" + q);
     }
 }
