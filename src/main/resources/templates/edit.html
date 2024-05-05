@@ -7,7 +7,7 @@
 <main layout:fragment="content">
     <p>Add a website to my reading list</p>
 
-    <form th:action="@{/{id}/edit(id=${bm.getId()})}" method="post">
+    <form th:action="@{/{id}/edit(id=${bm.getId()}, q=${q})}" method="post">
         <div class="field">
             <label for="url">Url</label>
             <input type="text" name="url" id="url" th:value="${bm.getUrl()}">
