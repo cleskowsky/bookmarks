@@ -38,7 +38,10 @@ public class BookmarksController {
         if (!q.isEmpty()) {
             logger.info("q=" + q);
             var tag = tagRepository.findByName(q);
-            var bookmarks = bookmarkRepository.findByTagsIdOrderByIdDesc(tag.getId());
+            var bookmarks = bookmarkRepository.findByTagsIdAndStatusOrderByIdDesc(
+                    tag.getId(),
+                    Bookmark.BookmarkStatus.Unread
+            );
             return new ModelAndView("index", Map.of(
                     "bookmarks", bookmarks,
                     "q", q
@@ -46,6 +49,7 @@ public class BookmarksController {
         }
 
         // todo: filters should combine
+        // todo: unread and read could just be tags i guess - would that simplify the project at all
         if (showOnly == null) {
             logger.info("showOnly=Unread");
             var bookmarks = bookmarkRepository.findByStatusOrderByIdDesc(Bookmark.BookmarkStatus.Unread);

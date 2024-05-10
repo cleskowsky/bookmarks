@@ -20,5 +20,5 @@ public interface BookmarkRepository extends CrudRepository<Bookmark, Integer> {
     @Query("update Bookmark set status = ?1 where id = ?2")
     void setStatusById(Bookmark.BookmarkStatus status, int id);
 
-    List<Bookmark> findByTagsIdOrderByIdDesc(long id);
+    List<Bookmark> findByTagsIdAndStatusOrderByIdDesc(long id, Bookmark.BookmarkStatus status);
 }

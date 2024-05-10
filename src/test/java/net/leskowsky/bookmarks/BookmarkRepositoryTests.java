@@ -56,7 +56,10 @@ public class BookmarkRepositoryTests {
         bookmarkRepository.save(bm);
 
         // when I fetch them from the db
-        var bookmarks = bookmarkRepository.findByTagsIdOrderByIdDesc(tag.getId());
+        var bookmarks = bookmarkRepository.findByTagsIdAndStatusOrderByIdDesc(
+                tag.getId(),
+                Bookmark.BookmarkStatus.Unread
+        );
 
         // then I should get them back in most recent first order
         assertEquals(2, bookmarks.size());
