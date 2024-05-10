@@ -13,7 +13,7 @@
         </li>
     </ul>
 
-    <div class="m-5">
+    <div class="m-8 w-full lg:w-1/4 mx-auto">
         <ul id="filters">
             <li>
                 <a href="/?showOnly=Read">Read</a> |
@@ -24,11 +24,11 @@
                 <a href="/?q=geerlingguy">Geerlingguy</a> |
                 <a href="/?q=git">Git</a> |
                 <a href="/?q=java">Java</a> |
-                <a href="/?q=java-spring">JavaSpring</a> |
                 <a href="/?q=jenkins">Jenkins</a> |
                 <a href="/?q=linux">Linux</a> |
                 <a href="/?q=manga">Manga</a> |
                 <a href="/?q=papers">Papers</a> |
+                <a href="/?q=production">Production</a> |
                 <a href="/?q=video">Videos</a>
             </li>
         </ul>
@@ -40,7 +40,7 @@
 
     <ul id="bookmarks" class="text-left">
         <li th:each="bookmark : ${bookmarks}"
-            class="list-none w-full lg:w-1/2 border-slate-300 border-dotted border-2 rounded-md mx-auto p-3 mb-6">
+            class="list-none w-full lg:w-1/2 border-slate-300 border-dotted border-2 rounded-md mx-auto p-3 mb-3">
             <!-- title, tags -->
             <div>
                 <a th:href="${bookmark.getUrl()}"
