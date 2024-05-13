@@ -1,2 +1,4 @@
 insert into tag (name)
-values ('martinfowler', 'travel', 'food');
+values ('martinfowler'),
+       ('travel'),
+       ('food');
