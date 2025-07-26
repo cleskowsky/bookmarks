@@ -35,6 +35,8 @@ public class BookmarkRepositoryTests {
         // when i search for unread bookmarks
         var bookmarks = bookmarkRepository.findByStatusOrderByIdDesc(Bookmark.BookmarkStatus.Unread);
 
+        System.out.println(bookmarks);
+
         // then i get a list of bookmarks in sort order createdAt desc
         assertEquals(2, bookmarks.size());
         assertEquals("url2", bookmarks.get(0).getUrl());

@@ -3,7 +3,7 @@
 - hosts: 127.0.0.1
   connection: local
   tasks:
-    - name: Create allow https security group
+    - name: Create allow web security group
       amazon.aws.ec2_security_group:
         name: allow_web
         description: Allow web
@@ -21,7 +21,7 @@
           Env: prod
           Ansible: 1
 
-    - name: Create allow web security group
+    - name: Create allow ssh security group
       amazon.aws.ec2_security_group:
         name: allow_ssh
         description: Allow ssh
