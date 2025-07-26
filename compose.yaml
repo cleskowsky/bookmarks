@@ -17,7 +17,6 @@ services:
   traefik:
     image: traefik:v3.0
     ports:
-      - "8080:8080"
       - "443:443"
       - "80:80"
     volumes:
