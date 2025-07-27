@@ -3,11 +3,7 @@ services:
     image: bookmarks:latest
     ports:
       - "8080"
-    volumes:
-      - "bookmarks_data:/var/lib"
-    restart: unless-stopped
     labels:
-      - traefik.http.routers.app.rule=Host(`bm.leskowsky.net`)
-
-volumes:
-  bookmarks_data:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bookmarks.rule=Host(`bm.localhost`)"
+      - "traefik.http.routers.bookmarks.entrypoints=web"
