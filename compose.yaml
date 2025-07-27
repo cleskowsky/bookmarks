@@ -14,15 +14,5 @@ services:
     labels:
       - traefik.http.routers.app.rule=Host(`bm.leskowsky.net`)
 
-  traefik:
-    image: traefik:v3.0
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - ./traefik.yml:/etc/traefik/traefik.yml
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: unless-stopped
-
 volumes:
   data:
