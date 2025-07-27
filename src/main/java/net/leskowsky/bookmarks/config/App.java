@@ -6,6 +6,4 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class App {
 
-    @Value("${App.homeUrl}")
-    public String homeUrl;
 }

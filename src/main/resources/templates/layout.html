@@ -33,7 +33,7 @@
 <p sec:authorize="isAuthenticated()" class="m-8" id="bookmarklet">
     <script th:inline="text">
         const anchor = document.createElement("a");
-        anchor.href = "javascript: (() => { window.open('[[${@app.homeUrl}]]/new?url=' + encodeURIComponent(window.location) + '&title=' + encodeURIComponent(document.title), '_blank'); })();";
+        anchor.href = "javascript: (() => { window.open('https://bm.leskowsky.net/new?url=' + encodeURIComponent(window.location) + '&title=' + encodeURIComponent(document.title), '_blank'); })();";
         anchor.text = 'Pin bookmarklet';
         document.getElementById('bookmarklet').appendChild(anchor);
     </script>
