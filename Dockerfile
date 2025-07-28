@@ -1,4 +1,4 @@
-FROM maven:3.9.6-amazoncorretto-21 as build
+FROM maven:3.9.6-amazoncorretto-21 AS build
 LABEL authors="christian"
 VOLUME /root/.m2
 WORKDIR /bookmarks

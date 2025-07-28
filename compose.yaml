@@ -1,33 +1,9 @@
 services:
-  app:
-    build:
-      tags:
-        - "bookmarks:${version}"
+  bookmarks:
+    image: bookmarks:latest
     ports:
       - "8080"
-    volumes:
-      - data:/var/lib
-    env_file:
-      - path: .env
-        required: false
-    restart: unless-stopped
     labels:
-      - traefik.http.routers.app.rule=Host(`bm.leskowsky.net`)
-      - traefik.http.routers.app.tls=true
-      - traefik.http.routers.app.tls.certresolver=myresolver
-
-  traefik:
-    image: traefik:v3.0
-    ports:
-      - "8080:8080"
-      - "443:443"
-      - "80:80"
-    volumes:
-      - ./traefik.yml:/etc/traefik/traefik.yml
-      - /var/run/docker.sock:/var/run/docker.sock
-      - letsencrypt:/letsencrypt
-    restart: unless-stopped
-
-volumes:
-  data:
-  letsencrypt:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bookmarks.rule=Host(`bm.localhost`)"
+      - "traefik.http.routers.bookmarks.entrypoints=web"
